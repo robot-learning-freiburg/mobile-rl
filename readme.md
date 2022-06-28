@@ -68,8 +68,8 @@ Install moveit and the pr2
     sudo apt-get install ros-[version]-pr2-simulator
     sudo apt-get install ros-[version]-moveit
     sudo apt-get install ros-[version]-moveit-pr2
-    ros-melodic-pr2-common
-    ros-melodic-pr2-navigation
+    ros-[version]-pr2-common
+    ros-[version]-pr2-navigation
    
 Create a catkin workspace (ideally a separate one for each robot)
 
@@ -78,7 +78,7 @@ Create a catkin workspace (ideally a separate one for each robot)
 
 Install further ros packages:
 
-    yes | rosinstall src /opt/ros/melodic modulation.rosinstall
+    yes | rosinstall src /opt/ros/[ros-version] modulation.rosinstall
 
 Fork the repo and clone into `./src`
     
