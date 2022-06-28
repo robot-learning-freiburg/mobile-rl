@@ -1,0 +1,7 @@
+- git: {local-name: bio_ik, uri: 'https://github.com/TAMS-Group/bio_ik.git', version: 'master'}
+- git: {local-name: aws-robomaker-bookstore-world, uri: 'https://github.com/dHonerkamp/aws-robomaker-bookstore-world.git', version: 'ros1'}
+- git: {local-name: navigation_layers, uri: 'https://github.com/dHonerkamp/navigation_layers.git', version: 'melodic'}
+- git: {local-name: tmc_control_msgs, uri: 'https://github.com/hsr-project/tmc_control_msgs.git', version: 'master'}
+- git: {local-name: tf_lookup, uri: 'https://github.com/pal-robotics/tf_lookup.git', version: 'master'}
+- git: {local-name: humanoid_msgs, uri: 'https://github.com/ahornung/humanoid_msgs.git', version: 'master'}
+- git: {local-name: pal_msgs, uri: 'https://github.com/pal-robotics/pal_msgs.git', version: 'indigo-devel'}

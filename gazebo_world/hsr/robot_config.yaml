@@ -1,0 +1,38 @@
+name: "hsrb"
+joint_model_group_name: "arm"
+torso_joint_name: "arm_lift_joint"
+frame_id: "map"
+global_link_transform: "hand_palm_link"
+tip_to_gripper_offset:
+  - 0.075
+  - 0.0
+  - 0.0
+gripper_to_base_rot_offset:
+  - 0.707
+  - 0.0
+  - 0.707
+  - 0.0
+base_cmd_topic: "/hsrb/command_velocity"
+base_vel_rng: 0.2
+base_rot_rng: 0.75
+torso_vel_rng: 0.2
+z_min: 0.2
+z_max: 1.4
+restricted_ws_z_min: 0.4
+restricted_ws_z_max: 1.1
+# max dist the ee plan is allowed to be from a feasible base plan
+# https://docs.hsr.io/hsrb_user_manual_en/overview/basic_specifications.html
+arm_range: 0.4
+gmm_base_offset: 0.25
+kinematics_solver_timeout: 0.005
+# values inferred from https://www.brain.kyutech.ac.jp/~hma/robots/hsr/
+robot_base_size_meters:
+  - 0.43
+inflation_radius_ee: 0.4
+gripper_collision_names:
+  - 'hsrb::wrist_ft_sensor_frame::wrist_ft_sensor_frame_fixed_joint_lump__wrist_roll_link_collision'
+  - 'hsrb::hand_r_distal_link::hand_r_distal_link_collision'
+  - 'hsrb::hand_l_distal_link::hand_l_distal_link_collision'
+  - 'hsrb::hand_r_spring_proximal_link::hand_r_spring_proximal_link_collision'
+  - 'hsrb::hand_l_spring_proximal_link::hand_l_spring_proximal_link_collision'
+  - 'hsrb::wrist_ft_sensor_frame::wrist_ft_sensor_frame_fixed_joint_lump__hand_palm_link_collision_1'

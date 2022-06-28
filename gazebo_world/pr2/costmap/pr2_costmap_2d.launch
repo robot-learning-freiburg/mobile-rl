@@ -1,0 +1,32 @@
+<launch>
+    <arg name="local_costmap_frame"/>
+    <arg name="use_gazebo" default="False"/>
+    <arg name="debug"      default="false"/>
+    <arg name="launch_prefix" value="gdb -ex run --args"     if="$(arg debug)"/>
+    <arg name="launch_prefix" value=""                   unless="$(arg debug)"/>
+
+    <!-- machine tags for sim, be sure to set environment variable ROBOT to sim -->
+    <include file="$(find pr2_machine)/sim.machine" />
+    <include file="$(find pr2_navigation_perception)/lasers_and_filters.xml" />
+    <include file="$(find pr2_navigation_perception)/ground_plane.xml" />
+
+    <!-- Throttle the voxel grid that is being published for rviz -->
+    <node ns="move_base_node/local_costmap" name="voxel_grid_throttle" pkg="topic_tools" type="throttle" machine="c2" args="messages voxel_grid 3.0 voxel_grid_throttled" />
+
+<!--    <rosparam file="$(find pr2_navigation_config)/move_base/recovery_behaviors.yaml" command="load"  ns="costmap_node/costmap"/>-->
+    <rosparam file="$(find modulation_rl)/gazebo_world/common/costmap/costmap_common_local.yaml" command="load" ns="costmap_node/costmap"/>
+    <rosparam file="$(find modulation_rl)/gazebo_world/pr2/costmap/costmap_common_params.yaml" command="load" ns="costmap_node/costmap"/>
+    <rosparam file="$(find modulation_rl)/gazebo_world/pr2/costmap/local_costmap_params.yaml" command="load"  ns="costmap_node/costmap"/>
+    <group if="$(eval local_costmap_frame != 'none')">
+        <param name="/costmap_node/costmap/global_frame" value="$(arg local_costmap_frame)"/>
+    </group>
+    <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" clear_params="false" launch-prefix="$(arg launch_prefix)"/>
+
+    <rosparam file="$(find pr2_navigation_config)/move_base/recovery_behaviors.yaml" command="load"  ns="costmap_node_global/costmap"/>
+    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/common/costmap/costmap_common_global.yaml" ns="costmap_node_global/costmap"/>
+    <rosparam file="$(find modulation_rl)/gazebo_world/pr2/costmap/costmap_common_params.yaml" command="load" ns="costmap_node_global/costmap"/>
+    <rosparam file="$(find modulation_rl)/gazebo_world/pr2/costmap/global_costmap_params.yaml" command="load"  ns="costmap_node_global/costmap"/>
+
+    <node name="costmap_node_global" pkg="costmap_2d" type="costmap_2d_node" clear_params="true" launch-prefix="$(arg launch_prefix)"/>
+
+</launch>

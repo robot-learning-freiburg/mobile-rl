@@ -1,0 +1,227 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+        <physics type="ode">
+      <gravity>0 0 -9.81</gravity>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>50</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100.0</contact_max_correcting_vel>
+          <contact_surface_layer>0.0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <!-- main impact on whether objects slip out of the gripper -->
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.0010</max_step_size>
+<!--      <real_time_update_rate>435</real_time_update_rate>-->
+<!--      <max_step_size>0.0023</max_step_size>-->
+    </physics>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 50 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+      <model name='EmptyRoom'>
+    <link name='Wall_1'>
+      <collision name='Wall_1_Collision'>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+      </collision>
+      <visual name='Wall_1_Visual'>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <ambient>1 1 1 1</ambient>
+        </material>
+        <meta>
+          <layer>0</layer>
+        </meta>
+      </visual>
+      <pose frame=''>-5.5 0 0 0 -0 -1.5708</pose>
+    </link>
+    <link name='Wall_2'>
+      <collision name='Wall_2_Collision'>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+      </collision>
+      <visual name='Wall_2_Visual'>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <ambient>1 1 1 1</ambient>
+        </material>
+        <meta>
+          <layer>0</layer>
+        </meta>
+      </visual>
+      <pose frame=''>-0 -5.5 0 0 -0 0</pose>
+    </link>
+    <link name='Wall_3'>
+      <collision name='Wall_3_Collision'>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+      </collision>
+      <visual name='Wall_3_Visual'>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <ambient>1 1 1 1</ambient>
+        </material>
+        <meta>
+          <layer>0</layer>
+        </meta>
+      </visual>
+      <pose frame=''>5.5 0 0 0 -0 1.5708</pose>
+    </link>
+    <link name='Wall_4'>
+      <collision name='Wall_4_Collision'>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+      </collision>
+      <visual name='Wall_4_Visual'>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>11 0.15 1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <ambient>1 1 1 1</ambient>
+        </material>
+        <meta>
+          <layer>0</layer>
+        </meta>
+      </visual>
+      <pose frame=''>-0 5.5 0 0 -0 3.14159</pose>
+    </link>
+    <static>1</static>
+  </model>
+
+<!--    <model name="DynamicObstacle1">-->
+<!--       <pose>-3 3 0.15 0 0 0</pose>-->
+<!--       <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+<!--    <model name="DynamicObstacle2">-->
+<!--      <pose>-3 0 0.15 0 0 0</pose>-->
+<!--      <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+<!--    <model name="DynamicObstacle3">-->
+<!--      <pose>-3 -3 0.15 0 0 0</pose>-->
+<!--      <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+<!--    <model name="DynamicObstacle4">-->
+<!--      <pose>0 3 0.15 0 0 0</pose>-->
+<!--      <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+<!--&lt;!&ndash;    <model name="DynamicObstacle5">&ndash;&gt;-->
+<!--&lt;!&ndash;      <pose>0 0 0.15 0 0 0</pose>&ndash;&gt;-->
+<!--&lt;!&ndash;      <include>&ndash;&gt;-->
+<!--&lt;!&ndash;        <uri>model://dynamic_obstacle</uri>&ndash;&gt;-->
+<!--&lt;!&ndash;      </include>&ndash;&gt;-->
+<!--&lt;!&ndash;    </model>&ndash;&gt;-->
+
+<!--    <model name="DynamicObstacle6">-->
+<!--      <pose>0 -3 0.15 0 0 0</pose>-->
+<!--      <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+<!--    <model name="DynamicObstacle7">-->
+<!--      <pose>3 3 0.15 0 0 0</pose>-->
+<!--      <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+<!--    <model name="DynamicObstacle8">-->
+<!--      <pose>3 0 0.15 0 0 0</pose>-->
+<!--      <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+<!--    <model name="DynamicObstacle9">-->
+<!--      <pose>3 -3 0.15 0 0 0</pose>-->
+<!--      <include>-->
+<!--        <uri>model://dynamic_obstacle</uri>-->
+<!--      </include>-->
+<!--    </model>-->
+
+  </world>
+</sdf>

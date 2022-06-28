@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <!-- Map server -->
+<!--    <arg name="map_file" default="$(find modulation_rl)/gazebo_world/worlds/modulation_tasks.yaml"/>-->
+<!--    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />-->
+
+    <arg name="debug"      default="false"/>
+    <arg name="use_map_frame"      default="false"/>
+    <arg name="launch_prefix" value="gdb -ex run --args"     if="$(arg debug)"/>
+    <arg name="launch_prefix" value=""                   unless="$(arg debug)"/>
+
+    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/common/costmap/costmap_common_local.yaml" ns="costmap_node/costmap"/>
+    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/hsr/costmap/costmap_common.yaml" ns="costmap_node/costmap"/>
+    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/hsr/costmap/costmap_local.yaml" ns="costmap_node/costmap"/>
+    <group if="$(arg use_map_frame)">
+        <param name="/costmap_node/costmap/global_frame" value="map"/>
+    </group>
+    <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" clear_params="false" launch-prefix="$(arg launch_prefix)"/>
+
+    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/common/costmap/costmap_common_global.yaml" ns="costmap_node_global/costmap"/>
+    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/hsr/costmap/costmap_common.yaml" ns="costmap_node_global/costmap"/>
+    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/hsr/costmap/costmap_global.yaml" ns="costmap_node_global/costmap"/>
+    <group if="$(arg use_map_frame)">
+        <param name="/costmap_node_global/costmap/global_frame" value="map"/>
+    </group>
+    <node name="costmap_node_global" pkg="costmap_2d" type="costmap_2d_node" clear_params="false" launch-prefix="$(arg launch_prefix)"/>
+</launch>

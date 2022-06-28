@@ -1,0 +1,66 @@
+pr2:
+  total_steps: 1000000
+  lr_start: 0.0001
+  transition_noise_base: 0.04
+  ikslack_dist: 0.1
+  ikslack_rot_dist: 0.05
+  acceleration_penalty: 0.05
+  ikslack_sol_dist_reward: 'l2'
+  iksolver: bioik
+  learn_vel_norm: 0.1
+  learn_torso: True
+  moveit_range: 1
+  moveit_max_waypoint_distance: 0.2
+  moveit_num_planning_attempts: 10
+  articulated_collision_mu: 500
+  articulated_collision_delta: 0.1
+  articulated_jv_mu: 0.01
+  articulated_jv_delta: 0.001
+  articulated_min_step: 0.01
+  articulated_time_horizon: 4
+tiago:
+  total_steps: 1000000
+  lr_start: 0.0001
+  transition_noise_base: 0.04
+  ikslack_dist: 0.1
+  ikslack_rot_dist: 0.05
+  acceleration_penalty: 0.05
+  ikslack_sol_dist_reward: 'l2'
+  iksolver: bioik
+  learn_vel_norm: 0.1
+  learn_torso: True
+  frame_skip:
+    - 8
+  frame_skip_curriculum: 1000000
+  articulated_collision_mu: 500
+  articulated_collision_delta: 0.1
+  articulated_jv_mu: 0.01
+  articulated_jv_delta: 0.01
+  articulated_min_step: 0.01
+  articulated_time_horizon: 4
+#  explore_noise_type: egreedy
+#  explore_noise: 0.0003
+#  irm:
+#    - 1
+#    - 5
+#    - 9
+hsr:
+  total_steps: 1000000
+  lr_start: 0.0001
+  transition_noise_base: 0.04
+  ikslack_dist: 0.1
+  ikslack_rot_dist: 0.05
+  acceleration_penalty: 0.05
+  ikslack_sol_dist_reward: 'l2'
+  iksolver: bioik
+  learn_vel_norm: 0.1
+  learn_torso: False
+  moveit_range: -1
+  moveit_max_waypoint_distance: 0.1
+  moveit_num_planning_attempts: 10
+  articulated_collision_mu: 500
+  articulated_collision_delta: 0.1
+  articulated_jv_mu: 0.01
+  articulated_jv_delta: 0.01
+  articulated_min_step: 0.01
+  articulated_time_horizon: 4

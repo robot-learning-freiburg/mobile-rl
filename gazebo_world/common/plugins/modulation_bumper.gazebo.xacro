@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="modulation_bumper" params="reference sensor_name collision_name">
+        <gazebo reference="${reference}">
+            <turnGravityOff>true</turnGravityOff>
+            <selfCollide>false</selfCollide>
+            <sensor type="contact" name="${sensor_name}_contact_sensor">
+                <update_rate>50.0</update_rate>
+                <contact>
+                    <collision>${collision_name}</collision>
+                    <topic>/bumper_contact</topic>
+                </contact>
+                <plugin name="${sensor_name}_bumper_controller" filename="libgazebo_ros_bumper.so">
+                    <alwaysOn>true</alwaysOn>
+                    <updateRate>50.0</updateRate>
+                    <bumperTopicName>/modulation_bumpers</bumperTopicName>
+                    <frameName>world</frameName>
+                </plugin>
+            </sensor>
+        </gazebo>
+    </xacro:macro>
+
+</robot>

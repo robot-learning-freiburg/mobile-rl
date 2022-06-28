@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="use_map" default="False" />
+    <arg name="BIOIK" default="True" />
+    <arg name="local_costmap_frame" default="none"/>
+
+    <include file="$(find pr2_teleop)/launch/teleop_joystick.launch"/>
+
+    <include file="$(find modulation_rl)/gazebo_world/pr2/pr2_move_group.launch">
+        <arg name="BIOIK" value="$(arg BIOIK)" />
+    </include>
+
+    <group if="$(arg use_map)">
+        <node name="map_server" pkg="map_server" type="map_server" args="$(find modulation_rl)/gazebo_world/worlds/robothall_map.yaml"/>
+        <include file="$(find amcl)/examples/pr2_amcl.launch"/>
+    </group>
+
+    <include file="$(find modulation_rl)/gazebo_world/pr2/costmap/pr2_costmap_2d.launch">
+        <arg name="local_costmap_frame" value="$(arg local_costmap_frame)" />
+    </include>
+
+    <!-- interactive marker to get user goals -->
+    <node pkg="modulation_rl" type="interactive_marker_node" name="interactive_marker_node" output="screen" />
+    <!-- node to turn head towards goal -->
+    <group>
+        <param name="robot_name" value="pr2"/>
+<!--         <param name="ar_marker_frame" value="ar_marker_1"/> -->
+        <param name="ar_marker_frame" value="aruco_marker_frame"/>
+        <param name="ar_marker_camera_frame" value="head_mount_kinect2_rgb_optical_frame"/>
+        <node name="camera_goalpointer" pkg="modulation_rl" type="camera_goalpointer.py"/>
+    </group>
+
+    <group unless="$(arg use_map)">
+	  <node pkg="tf" type="static_transform_publisher" name="static_map_tf_publisher" args="0 0 0 0 0 0 1 'map' 'odom_combined' 100"/>
+    </group>
+
+</launch>

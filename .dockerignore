@@ -1,0 +1,11 @@
+.idea/
+logs/
+wandb/
+scripts/logs/
+scripts/wandb/
+scripts/paper_n1/
+scripts/paper_n2/
+webots/
+scripts/model_checkpoints/
+.git/objects
+*.npy

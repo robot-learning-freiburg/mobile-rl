@@ -1,0 +1,39 @@
+name: modulation_rl
+channels:
+  - pytorch
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.7
+  - pytorch=1.7.1
+  - torchvision=0.8.2
+  - cudatoolkit=11.0.3
+  - pybind11
+  - numpy
+  - pip
+  - matplotlib
+  - empy
+  - pyparsing
+  - pillow=9.0.1
+  - seaborn
+  - scipy
+  - typing_extensions
+  - cmake>=3.14
+  - pip:
+      # NOTE: with 0.10.29 resuming a run makes PR2Env() get stuck at initialisation somehow
+      - wandb==0.10.11
+      - stable-baselines3==0.10.0
+      - tensorboard
+      # NOTE: requires to not have the python2 version in PYTHONPATH
+      - roslibpy
+      - rospkg
+      - catkin_pkg
+      - gym==0.21.0
+      - cloudpickle==1.5.0
+      - git+https://github.com/dhonerkamp/pyastar.git@master#egg=pyastar
+      - ray[default,rllib]==1.6.0
+      - hpbandster
+      - ConfigSpace
+      - supersuit
+      - vit-pytorch
+      - defusedxml

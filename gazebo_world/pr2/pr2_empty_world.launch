@@ -1,0 +1,86 @@
+<launch>
+
+  <!-- start up empty world -->
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false" />
+  <arg name="debug" default="false" />
+  <arg name="paused" default="true"/>
+  <!-- TODO: throttled not implemented in gazebo_ros/empty_world.launch
+  <arg name="throttled" default="false"/>
+  -->
+  <arg name="world_name" default="modulation_tasks.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+
+  <arg name="KINECT1" default="$(optenv KINECT1 true)" />
+  <arg name="KINECT2" default="$(optenv KINECT2 false)" />
+  <arg name="BIOIK" default="false" />
+  <arg name="local_costmap_frame" default="none"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="headless" value="$(arg headless)" />
+    <arg name="paused" value="$(arg paused)" />
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="use_sim_time" value="true" />
+    <!-- TODO: throttled not implemented in gazebo_ros/empty_world.launch
+    <arg name="throttled" value="$(arg throttled)" />
+    -->
+    <arg name="world_name" value="$(arg world_name)"/>
+  </include>
+
+  <!-- start pr2 robot -->
+  <include file="$(find modulation_rl)/gazebo_world/pr2/pr2.launch">
+    <arg name="KINECT1" value="$(arg KINECT1)" />
+    <arg name="KINECT2" value="$(arg KINECT2)" />
+  </include>
+
+ <node pkg="tf" type="static_transform_publisher" name="blub" args="0 0 0 0 0 0 1 'map' 'odom_combined' 100"/>-->
+
+<!--   <node pkg="fake_localization" type="fake_localization" name="fake_localization" output="screen"> -->
+<!--       <param name="odom_frame_id" value="odom_combined"/> -->
+<!--       <param name="base_frame_id" value="base_footprint"/> -->
+<!--   </node> -->
+
+  <include file="$(find modulation_rl)/gazebo_world/pr2/pr2_move_group.launch">
+    <arg name="BIOIK" value="$(arg BIOIK)" />
+  </include>
+
+
+  <node pkg="tf_lookup" type="tf_lookup" name="tf_lookup" output="screen"/>
+  <arg name="topic" default="sonar_cloud"/>
+<!--  <node pkg="sensor_to_cloud" type="sonar_to_cloud" name="sonar_to_cloud" output="screen">-->
+<!--    <remap from="sonar_cloud" to="$(arg topic)" />-->
+<!--    &lt;!&ndash; dynamic_reconfigure params &ndash;&gt;-->
+<!--    <param name="infinity_dist" value="4.0"/>-->
+<!--    <param name="aperture_angle" value="0.18"/>-->
+<!--    <param name="arc_resolution" value="0.01"/>-->
+<!--    &lt;!&ndash; static params &ndash;&gt;-->
+<!--    <param name="sonar_base_topic" value="sonar_base"/>-->
+<!--    <param name="sonar_torso_topic" value="sonar_torso"/>-->
+<!--  </node>-->
+
+<!--  <include file="$(find modulation_rl)/gazebo_world/pr2/costmap/move_base.launch"/>-->
+  <include file="$(find modulation_rl)/gazebo_world/pr2/costmap/pr2_costmap_2d.launch">
+    <arg name="local_costmap_frame" value="$(arg local_costmap_frame)" />
+    <arg name="use_gazebo" value="True" />
+  </include>
+
+<!--  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">-->
+<!--    <param name="resolution" value="0.05" />-->
+<!--    <param name="frame_id" type="string" value="map" />-->
+<!--    <param name="sensor_model/max_range" value="3.0" />-->
+<!--&lt;!&ndash;    <param name="occupancy_max_z" value="3.0" />&ndash;&gt;-->
+<!--    &lt;!&ndash; data source to integrate (PointCloud2) &ndash;&gt;-->
+<!--    <remap from="cloud_in" to="/head_mount_kinect2/depth_registered/points" />-->
+<!--  </node>-->
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find modulation_rl)/rviz/rviz_config.rviz" if="$(arg gui)"/>
+  <node pkg="modulation_rl" type="interactive_marker_node" name="interactive_marker_node" output="screen" if="$(arg gui)" />
+
+  <node name="move_obstacles" pkg="modulation_rl" type="move_obstacles.py"/>
+<!--    <group>-->
+<!--        <param name="robot_name" value="pr2"/>-->
+<!--        <param name="ar_marker_frame" value="ar_marker"/>-->
+<!--        <node name="camera_goalpointer" pkg="modulation_rl" type="camera_goalpointer.py"/>-->
+<!--    </group>-->
+</launch>
+

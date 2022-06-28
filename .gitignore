@@ -1,0 +1,13 @@
+# file types
+*.pyc
+# directories
+logs/
+wandb/
+/scripts/paper_n1/
+/scripts/paper_n2/
+.idea_pycharm/
+.idea_clion/
+.idea/
+# files
+Tims_pr2_arm_base_control.cpp
+/scripts/model_checkpoints/graspHack
