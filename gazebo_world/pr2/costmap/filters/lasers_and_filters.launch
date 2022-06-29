@@ -1,0 +1,94 @@
+<launch>
+  <arg name="use_gazebo"/>
+
+  <node pkg="topic_tools" type="throttle" name="base_scan_throttle" args="messages base_scan 1.0 base_scan_throttled" machine="c2" output="screen"/>
+
+  <!-- Filter for tilt laser shadowing/veiling -->
+  <group if="$(arg use_gazebo)">
+    <node pkg="laser_filters" type="scan_to_cloud_filter_chain" respawn="true" machine="c2" name="tilt_shadow_filter">
+      <remap from="scan" to="tilt_scan" />
+      <remap from="cloud_filtered" to="tilt_scan_shadow_filtered" />
+      <param name="target_frame" value="base_footprint" />
+      <param name="high_fidelity" value="true" />
+      <!--    MYCHANGE: GAZEBO RETURNS 0 INTENSITIES WHICH GET FILTERED OUT -->
+<!--      <rosparam command="load" file="$(find pr2_navigation_perception)/config/tilt_laser_filters.yaml" />-->
+      <rosparam command="load" file="$(find modulation_rl)/gazebo_world/pr2/costmap/filters/tilt_laser_filters.yaml" />
+      <rosparam command="load" file="$(find pr2_navigation_perception)/config/point_cloud_footprint_filter.yaml" />
+    </node>
+  </group>
+  <group unless="$(arg use_gazebo)">
+    <node pkg="laser_filters" type="scan_to_cloud_filter_chain" respawn="true" machine="c2" name="tilt_shadow_filter">
+      <remap from="scan" to="tilt_scan" />
+      <remap from="cloud_filtered" to="tilt_scan_shadow_filtered" />
+      <param name="target_frame" value="base_footprint" />
+      <param name="high_fidelity" value="true" />
+      <rosparam command="load" file="$(find pr2_navigation_perception)/config/tilt_laser_filters.yaml" />
+      <rosparam command="load" file="$(find pr2_navigation_perception)/config/point_cloud_footprint_filter.yaml" />
+    </node>
+  </group>
+
+  <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="interpolate_missing_tilt_laser_data_filter" machine="c2">
+    <rosparam command="load" file="$(find pr2_navigation_perception)/config/laser_interpolation.yaml" />
+    <remap from="scan" to="tilt_scan" />
+    <remap from="scan_filtered" to="tilt_scan_interpolated" />
+  </node>
+
+  <!-- Filter for tilt laser scans that hit the body of the robot -->
+  <node pkg="pr2_navigation_self_filter" type="self_filter" name="tilt_laser_self_filter" machine="c2" respawn="true" output="screen">
+
+    <!-- The topic for the input cloud -->
+    <remap from="cloud_in" to="tilt_scan_shadow_filtered" />
+
+    <!-- The topic for the output cloud -->
+    <remap from="cloud_out" to="tilt_scan_filtered" />
+
+   <rosparam command="load" file="$(find pr2_navigation_perception)/config/tilt_self_filter.yaml" />
+
+    <!-- The frame of the sensor used to obtain the data to be
+      filtered; This parameter is optional. If it is not specified,
+      shadow points will be considered outside -->
+    <param name="sensor_frame" type="string" value="laser_tilt_link" />
+  </node>
+
+  <!-- Filter for base laser shadowing/veiling -->
+  <group if="$(arg use_gazebo)">
+    <node pkg="laser_filters" type="scan_to_cloud_filter_chain" respawn="true" machine="c2" name="base_shadow_filter" >
+      <remap from="scan" to="base_scan" />
+      <remap from="cloud_filtered" to="base_scan_shadow_filtered" />
+      <param name="target_frame" value="base_footprint" />
+      <!-- MYCHANGE: GAZEBO RETURNS 0 INTENSITIES WHICH GET FILTERED OUT -->
+<!--      <rosparam command="load" file="$(find pr2_navigation_perception)/config/shadow_filter.yaml" />-->
+      <rosparam command="load" file="$(find modulation_rl)/gazebo_world/pr2/costmap/filters/shadow_filter.yaml" />
+      <rosparam command="load" file="$(find pr2_navigation_perception)/config/point_cloud_footprint_filter.yaml" />
+    </node>
+  </group>
+  <group unless="$(arg use_gazebo)">
+    <node pkg="laser_filters" type="scan_to_cloud_filter_chain" respawn="true" machine="c2" name="base_shadow_filter" >
+      <remap from="scan" to="base_scan" />
+      <remap from="cloud_filtered" to="base_scan_shadow_filtered" />
+      <param name="target_frame" value="base_footprint" />
+      <rosparam command="load" file="$(find pr2_navigation_perception)/config/shadow_filter.yaml" />
+  <!--    <rosparam command="load" file="$(find modulation_rl)/gazebo_world/pr2/costmap/filters/shadow_filter.yaml" />-->
+      <rosparam command="load" file="$(find pr2_navigation_perception)/config/point_cloud_footprint_filter.yaml" />
+    </node>
+  </group>
+
+  <!-- Filter for base laser scans that hit the body of the robot -->
+  <node pkg="pr2_navigation_self_filter" type="self_filter" name="base_laser_self_filter" machine="c2" respawn="true" output="screen">
+
+    <!-- The topic for the input cloud -->
+    <remap from="cloud_in" to="base_scan_shadow_filtered" />
+
+    <!-- The topic for the output cloud -->
+    <remap from="cloud_out" to="base_scan_marking" />
+
+    <!-- The frame of the sensor used to obtain the data to be
+      filtered; This parameter is optional. If it is not specified,
+      shadow points will be considered outside -->
+    <param name="sensor_frame" type="string" value="base_laser_link" />
+
+    <rosparam command="load" file="$(find pr2_navigation_perception)/config/base_self_filter.yaml" />
+
+  </node>
+
+</launch>

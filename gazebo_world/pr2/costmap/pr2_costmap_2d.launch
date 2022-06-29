@@ -7,7 +7,10 @@
 
     <!-- machine tags for sim, be sure to set environment variable ROBOT to sim -->
     <include file="$(find pr2_machine)/sim.machine" />
-    <include file="$(find pr2_navigation_perception)/lasers_and_filters.xml" />
+<!--    <include file="$(find pr2_navigation_perception)/lasers_and_filters.xml" />-->
+    <include file="$(find modulation_rl)/gazebo_world/pr2/costmap/filters/lasers_and_filters.launch">
+        <arg name="use_gazebo" value="$(arg use_gazebo)"/>
+    </include>
     <include file="$(find pr2_navigation_perception)/ground_plane.xml" />
 
     <!-- Throttle the voxel grid that is being published for rviz -->

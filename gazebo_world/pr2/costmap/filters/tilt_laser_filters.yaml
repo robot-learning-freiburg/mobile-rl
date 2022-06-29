@@ -1,0 +1,28 @@
+scan_filter_chain:
+- name: shadows
+  type: laser_filters/ScanShadowsFilter
+  params:
+    min_angle: 10
+    max_angle: 170
+    neighbors: 20
+    window: 1
+- name: dark_shadows
+  type: laser_filters/LaserScanIntensityFilter
+  params: 
+#    lower_threshold: 100
+    lower_threshold: -1
+    upper_threshold: 10000
+    disp_histogram: 0
+- name: angular_bounds
+  type: laser_filters/LaserScanAngularBoundsFilter
+  params:
+    lower_angle: -1.22173048
+    upper_angle: 1.22173048
+- name: downscan_filter
+  type: laser_tilt_controller_filter/LaserTiltControllerFilter
+  params:
+    filter_sections: [1]
+    # The 1.75 entry here is .05 seconds less than the 1.8 entry in pr2_move_base/scripts/pr2_move_base.py.
+    # The reduction prevents marking obstacles at the top edge of the tilt scan, which for some reason do
+    # not reliably get cleared by later clearing scans.
+    tilt_profile_times: [0.0, 1.75, 2.3125]
