@@ -55,7 +55,6 @@ RUN catkin config --blacklist tiago_pcl_tutorial # combined_robot_hw_tests # for
 RUN /bin/bash -c ". /opt/ros/melodic/setup.bash && catkin build || exit"
 
 # update the moveit configs with the global joint
-COPY gazebo_world/tiago/robot/modified_tiago.srdf.em src/tiago_moveit_config/config/srdf/tiago.srdf.em
 COPY gazebo_world/tiago/robot/modified_tiago_pal-gripper.srdf src/tiago_moveit_config/config/srdf/tiago_pal-gripper.srdf
 COPY gazebo_world/tiago/robot/modified_gripper.urdf.xacro src/pal_gripper/pal_gripper_description/urdf/gripper.urdf.xacro
 COPY gazebo_world/tiago/robot/modified_wsg_gripper.urdf.xacro src/pal_wsg_gripper/pal_wsg_gripper_description/urdf/gripper.urdf.xacro

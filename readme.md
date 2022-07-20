@@ -4,7 +4,7 @@ Repository providing the source code for the paper "N2M2:  Learning Navigation f
 Please cite the paper as follows:
 
     @article{honerkamp2021learning,
-        title={Learning Navigation for Arbitrary Mobile Manipulation Motions in Unseen and Dynamic Environments},
+        title={N2M2: Learning Navigation for Arbitrary Mobile Manipulation Motions in Unseen and Dynamic Environments},
         author={Daniel Honerkamp and Tim Welschehold and Abhinav Valada},
         journal={arXiv preprint arXiv:2206.08737},
         year={2022},
@@ -38,6 +38,14 @@ The following commands also assume that you have docker installed, and to use a 
 
 The commands to train and evaluate the models in the paper can be found in `docker_run.sh`.
 
+To run the container interactively, use the following commands: 
+
+    docker run -it --gpus all --rm dhonerkamp/mobile_rl:11.1-latest bash
+    cd catkin_ws_[pr2/hsr/tiago]
+    source devel/setup.bash
+    conda activate
+
+then proceed to the "Run" section below.
 
 ## Evaluating on your own task
 Tasks are implemented as environment wrappers in `scripts/modulation/envs/tasks.py`.
@@ -68,8 +76,8 @@ Install moveit and the pr2
     sudo apt-get install ros-[version]-pr2-simulator
     sudo apt-get install ros-[version]-moveit
     sudo apt-get install ros-[version]-moveit-pr2
-    ros-[version]-pr2-common
-    ros-[version]-pr2-navigation
+    ros-melodic-pr2-common
+    ros-melodic-pr2-navigation
    
 Create a catkin workspace (ideally a separate one for each robot)
 
@@ -78,7 +86,7 @@ Create a catkin workspace (ideally a separate one for each robot)
 
 Install further ros packages:
 
-    yes | rosinstall src /opt/ros/[ros-version] modulation.rosinstall
+    yes | rosinstall src /opt/ros/melodic modulation.rosinstall
 
 Fork the repo and clone into `./src`
     
@@ -110,15 +118,21 @@ For more details and how to install the ROS requirements for the other robots pl
 
 
 ### Run
+- If you have a weights and biases account, log into the account. Otherwise first run `wandb offline` in your shell, which will turn off logging.
+
 - Training (set workers etc. as needed, this is the command used in the paper):
 
         python src/modulation_rl/scripts/main_ray.py --load_best_defaults --num_gpus 0.24 --num_workers 20 
         --num_cpus_per_worker 0.1 --num_envs_per_worker 1 --num_gpus_per_worker 0 --ray_verbosity 2
         --training_intensity 0.1 --load_best_defaults --vis_env
 
-- Evaluation:
+- Evaluation of a pretrained checkpoint (pick one of [pr2/hsr/tiago]):
 
-        python src/modulation_rl/scripts/evaluation_ray.py --evaluation_only --eval_execs sim gazebo --env pr2 --resume_id ${wandb_run_id} --eval_tasks picknplace --vis_env
+        python src/modulation_rl/scripts/evaluation_ray.py --evaluation_only --eval_execs sim gazebo --env [pr2/hsr/tiago] --model_file=[pr2/hsr/tiago]/checkpoint-1000 --eval_tasks picknplace --vis_env 
+
+- Evaluation of a wandb logged run (adjust [pr2/hsr/tiago] and ${wandb_run_id}):
+
+        python src/modulation_rl/scripts/evaluation_ray.py --evaluation_only --eval_execs sim gazebo --env [pr2/hsr/tiago] --resume_id ${wandb_run_id} --eval_tasks picknplace --vis_env
 
 5. [Only to visualise] start rviz:
 

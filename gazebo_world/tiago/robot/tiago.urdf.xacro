@@ -37,7 +37,7 @@
       <xacro:wrong_wrist_model/>
     </xacro:if>
   </xacro:if>
-  <xacro:if value="${end_effector not in ['false', False, 'pal-gripper', 'pal-hey5', 'schunk-wsg', 'robotiq-2f-85', 'robotiq-2f-140', 'custom']}">
+  <xacro:if value="${end_effector not in ['false', False, 'pal-gripper', 'pal-hey5', 'schunk-wsg', 'robotiq-2f-85', 'robotiq-2f-140', 'robotiq-epick', 'custom', 'no-ee']}">
     <xacro:wrong_end_effector/>
   </xacro:if>
   <xacro:if value="${ft_sensor not in ['false', False, 'schunk-ft']}">
@@ -57,6 +57,7 @@
    <xacro:property name="has_arm"                 value="$(arg arm)"/>
    <xacro:property name="has_schunk_ft"           value="${ft_sensor == 'schunk-ft'}"/>
    <xacro:property name="has_ft_sensor"           value="${has_schunk_ft}"/> <!-- This should be OR'ed with other FT sensors-->
+   <xacro:property name="has_end_effector"        value="${end_effector not in ['false', False, 'no-ee']}"/>
    <xacro:property name="end_effector_link"       value="${'wrist_ft_tool_link' if has_ft_sensor else 'arm_tool_link'}"/>
    <xacro:property name="end_effector_name"       value="${'hand' if end_effector == 'pal-hey5' else 'gripper'}"/>
    <xacro:property name="head_link_name"          value="head_2_link"/>
@@ -107,7 +108,7 @@
 	  <xacro:tiago_arm name="arm" parent="torso_lift_link" wrist_model="${wrist_model}" has_ft_sensor="${has_ft_sensor}" reflect="1" tiago_dual="-1" arm_1_offset="${arm_1_joint_offset}" arm_2_offset="${arm_2_joint_offset}" arm_3_offset="${arm_3_joint_offset}" arm_4_offset="${arm_4_joint_offset}" arm_5_offset="${arm_5_joint_offset}" arm_6_offset="${arm_6_joint_offset}" arm_7_offset="${arm_7_joint_offset}" no_safety_eps="${no_safety_eps}">
         <origin xyz="0.15505 0.014 -0.151" rpy="0 0 ${-90 * deg_to_rad}" />
       </xacro:tiago_arm>
-      <xacro:tiago_end_effector name="${end_effector_name}" parent="${end_effector_link}" type="${end_effector}" reflect="1"/>
+      <xacro:tiago_end_effector name="${end_effector_name}" parent="${end_effector_link}" type="${end_effector}" has_end_effector="${has_end_effector}" reflect="1"/>
   </xacro:if>
 
   <!-- Force Torque sensor -->

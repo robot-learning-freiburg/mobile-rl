@@ -514,7 +514,7 @@ def create_env(config,
 
     wrap_kwargs = {"frame_skip": config['frame_skip'],
                    "frame_skip_observe": config["frame_skip_observe"],
-                   "gamma": config.get('gamma')}
+                   "gamma": config.get('gamma') or config.get('player_gamma')}
 
     return wrap_in_task(env=env, task=task, wrap_kwargs=wrap_kwargs, **env_kwargs)
 
