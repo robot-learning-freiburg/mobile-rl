@@ -4,7 +4,7 @@ Repository providing the source code for the paper "N2M2:  Learning Navigation f
 Please cite the paper as follows:
 
     @article{honerkamp2021learning,
-        title={N2M2: Learning Navigation for Arbitrary Mobile Manipulation Motions in Unseen and Dynamic Environments},
+        title={N$^2$M$^2$: Learning Navigation for Arbitrary Mobile Manipulation Motions in Unseen and Dynamic Environments},
         author={Daniel Honerkamp and Tim Welschehold and Abhinav Valada},
         journal={arXiv preprint arXiv:2206.08737},
         year={2022},
