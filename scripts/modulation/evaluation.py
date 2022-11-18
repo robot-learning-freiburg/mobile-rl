@@ -273,7 +273,10 @@ def evaluation_rollout(policy, env, num_eval_episodes: int, global_step: Optiona
         log_dict[f'{name_prefix}/vel_norm'] = np.mean([np.mean([s[0] for s in e.unscaled_actions]) for e in episodes])
 
     if global_step is None:
-        global_step = get_next_global_step(debug=debug, increment=5)
+        if wandb.run.mode in ["dryrun", "offline", "disabled"]:
+            global_step = 0
+        else:
+            global_step = get_next_global_step(debug=debug, increment=5)
 
     fails_per_episode = np.array([e.nr_kin_failures for e in episodes])
     metrics = {f'return_undisc':        np.mean([e.total_reward for e in episodes]),

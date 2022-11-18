@@ -40,12 +40,25 @@ The commands to train and evaluate the models in the paper can be found in `dock
 
 To run the container interactively, use the following commands: 
 
-    docker run -it --gpus all --rm dhonerkamp/mobile_rl:11.1-latest bash
+    docker run -it --gpus all --network host --rm dhonerkamp/mobile_rl:11.1-latest bash
     cd catkin_ws_[pr2/hsr/tiago]
     source devel/setup.bash
     conda activate
 
 then proceed to the "Run" section below.
+
+To visualize the runs, start rviz _outside_ of the docker container with the following command (the `--network host` flag means that the ROS messages are available on the host machine):
+```
+rviz -d src/modulation_rl/rviz/rviz_config[_tiago_hsr].config
+```
+
+Unfortunately running the GUIs inside docker is more evolved. So for visualizing Gazebo, it is often more convenient to follow the local installation section below.
+Alternatively, instead of the docker command, it is possible to use [rocker](https://github.com/osrf/rocker) as follows:
+```
+pip install rocker
+rocker --nvidia --x11 --pull dhonerkamp/mobile_rl:11.1-latest bash
+```
+followed by the commands in the Run section below.
 
 ## Evaluating on your own task
 Tasks are implemented as environment wrappers in `scripts/modulation/envs/tasks.py`.

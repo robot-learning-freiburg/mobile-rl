@@ -296,7 +296,7 @@ def launch_ros(main_path: Path, config, task: str, no_gui: bool = False, always_
     args = ["--env", config['env'], "--algo", algo, "--pure_analytical", pure_analytical, "--task", task]
     if config.iksolver == "bioik":
         args += ["--bioik"]
-    if config.debug and not no_gui:
+    if (config.vis_env or config.debug) and (not no_gui):
         args += ["--gui"]
 
     # remove any references to the conda env, so that roslaunch really uses python2 in everything it starts
