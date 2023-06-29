@@ -5,7 +5,7 @@ Please cite the paper as follows:
 
     @article{honerkamp2021learning,
         title={N$^2$M$^2$: Learning Navigation for Arbitrary Mobile Manipulation Motions in Unseen and Dynamic Environments},
-	journal={IEEE Transactions on Robotics}, 
+        journal={IEEE Transactions on Robotics}, 
         author={Daniel Honerkamp and Tim Welschehold and Abhinav Valada},
         journal={arXiv preprint arXiv:2206.08737},
         year={2023},
