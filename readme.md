@@ -9,7 +9,7 @@ Please cite the paper as follows:
         author={Daniel Honerkamp and Tim Welschehold and Abhinav Valada},
         journal={arXiv preprint arXiv:2206.08737},
         year={2023},
-	doi={10.1109/TRO.2023.3284346}
+        doi={10.1109/TRO.2023.3284346}
     }
 
 Note: the current version represents the code used for the paper, except for the proprietary components outlined below. We may release a cleaner, more modular version of this code in the future.
