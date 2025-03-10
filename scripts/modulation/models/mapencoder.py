@@ -37,7 +37,9 @@ class LocalMapCNN(nn.Module):
         return self.model(x)
 
 
-class LocalDoubleMapCNN(jit.ScriptModule):
+# NOTE: making this a jit.ScriptModule instead of an nn.Module makes it faster, but copying it will make the components
+# non-leaf nodes, leading to an error from the optimizer when training
+class LocalDoubleMapCNN(nn.Module):
     def __init__(self, in_shape: Tuple[int, int, int], out_channels: int, stride: int = 1, flatten: bool = True):
         super(LocalDoubleMapCNN, self).__init__()
 
