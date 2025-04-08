@@ -1,0 +1,143 @@
+<?xml version="1.0" ?>
+<robot name="panda" xmlns:xacro="http://www.ros.org/wiki/xacro">
+ <xacro:include filename="$(find modulation_rl)/gazebo_world/fmm/franka_arm/utils.xacro"/>
+ <!-- safety_distance: Minimum safety distance in [m] by which the collision volumes are expanded and which is enforced during robot motions -->
+ <!-- arm_id: Namespace of the robot arm. Serves to differentiate between arms in case of multiple instances. -->
+ <!-- joint_limits: description of the joint limits that comes from a YAML file. Example definition: ${xacro.load_yaml('$(find franka_description)/robots/fr3/joint_limits.yaml')} -->
+ <xacro:macro name="franka_arm" params="arm_id:='panda' description_pkg:='franka_description' connected_to:='' xyz:='0 0 0' rpy:='0 0 0' gazebo:=false safety_distance:=0 joint_limits">
+  <xacro:unless value="${not connected_to}">
+   <joint name="${arm_id}_joint_${connected_to}" type="fixed">
+    <parent link="${connected_to}"/>
+    <child link="${arm_id}_link0"/>
+    <origin rpy="${rpy}" xyz="${xyz}"/>
+   </joint>
+  </xacro:unless>
+  <xacro:link_with_sc gazebo="${gazebo}" name="link0">
+   <self_collision_geometries>
+    <xacro:collision_capsule direction="x" length="0.03" radius="${0.06+safety_distance}" xyz="-0.075 0 0.06"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <xacro:link_with_sc gazebo="${gazebo}" name="link1">
+   <self_collision_geometries>
+    <xacro:collision_capsule length="0.283" radius="${0.06+safety_distance}" xyz="0 0 -191.5e-3"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <joint name="${arm_id}_joint1" type="revolute">
+   <origin rpy="0 0 0" xyz="0 0 0.333"/>
+   <parent link="${arm_id}_link0"/>
+   <child link="${arm_id}_link1"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint1"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint>
+  <xacro:link_with_sc gazebo="${gazebo}" name="link2">
+   <self_collision_geometries>
+    <xacro:collision_capsule length="0.12" radius="${0.06+safety_distance}" xyz="0 0 0"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <joint name="${arm_id}_joint2" type="revolute">
+   <origin rpy="${-pi/2} 0 0" xyz="0 0 0"/>
+   <parent link="${arm_id}_link1"/>
+   <child link="${arm_id}_link2"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint2"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint>
+  <xacro:link_with_sc gazebo="${gazebo}" name="link3">
+   <self_collision_geometries>
+    <xacro:collision_capsule length="0.15" radius="${0.06+safety_distance}" xyz="0 0 -0.145"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <joint name="${arm_id}_joint3" type="revolute">
+   <origin rpy="${pi/2} 0 0" xyz="0 -0.316 0"/>
+   <parent link="${arm_id}_link2"/>
+   <child link="${arm_id}_link3"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint3"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint>
+  <xacro:link_with_sc gazebo="${gazebo}" name="link4">
+   <self_collision_geometries>
+    <xacro:collision_capsule length="0.12" radius="${0.06+safety_distance}" xyz="0 0 0"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <joint name="${arm_id}_joint4" type="revolute">
+   <origin rpy="${pi/2} 0 0" xyz="0.0825 0 0"/>
+   <parent link="${arm_id}_link3"/>
+   <child link="${arm_id}_link4"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint4"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint>
+  <xacro:link_with_sc gazebo="${gazebo}" name="link5">
+   <self_collision_geometries>
+    <xacro:collision_capsule length="0.10" radius="${0.060+safety_distance}" xyz="0 0 -0.26"/>
+    <xacro:collision_capsule length="0.14" radius="${0.025+safety_distance}" xyz="0 0.08 -0.13"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <joint name="${arm_id}_joint5" type="revolute">
+   <origin rpy="${-pi/2} 0 0" xyz="-0.0825 0.384 0"/>
+   <parent link="${arm_id}_link4"/>
+   <child link="${arm_id}_link5"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint5"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint>
+  <xacro:link_with_sc gazebo="${gazebo}" name="link6">
+   <self_collision_geometries>
+    <xacro:collision_capsule length="0.08" radius="${0.05+safety_distance}" xyz="0 0 -0.03"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <joint name="${arm_id}_joint6" type="revolute">
+   <origin rpy="${pi/2} 0 0" xyz="0 0 0"/>
+   <parent link="${arm_id}_link5"/>
+   <child link="${arm_id}_link6"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint6"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint>
+  <link gazebo="${gazebo}" name="${arm_id}_link_new"/>
+  <!-- <xacro:link_with_sc name="link_new" gazebo="${gazebo}">
+      <self_collision_geometries>
+        <xacro:collision_capsule xyz="0 0 -0.03" radius="${0.05+safety_distance}" length="0.08" />
+      </self_collision_geometries>
+    </xacro:link_with_sc> -->
+  <joint name="${arm_id}_joint_new" type="fixed">
+   <origin rpy="0 0 0" xyz="0.08 0 0"/>
+   <!-- <origin rpy="0 0 0" xyz="0.0 0 0"/>       -->
+   <parent link="${arm_id}_link6"/>
+   <child link="${arm_id}_link_new"/>
+   <axis xyz="0 0 1"/>
+  </joint>
+  <!-- <joint name="${arm_id}_joint_new" type="revolute">
+   <origin rpy="0 0 1.4311" xyz="0.06377465893646721 -0.18221331124704915 0"/>
+   <origin rpy="0 0 0" xyz="0.0 0 0"/>
+   <parent link="${arm_id}_link6"/>
+   <child link="${arm_id}_link_new"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint7"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint> -->
+  <xacro:link_with_sc gazebo="${gazebo}" name="link7" rpy="0 0 ${pi/4}">
+   <self_collision_geometries>
+    <xacro:collision_capsule direction="z" length="0.14" radius="${0.04+safety_distance}" xyz="0 0 0.01"/>
+    <xacro:collision_capsule direction="x" length="0.01" radius="${0.03+safety_distance}" xyz="0.06 0 0.082"/>
+   </self_collision_geometries>
+  </xacro:link_with_sc>
+  <joint name="${arm_id}_joint7" type="revolute">
+   <origin rpy="${pi/2} 0 0" xyz="0 0 0"/>
+   <!-- <origin rpy="${pi/2} 0 0" xyz="0.088 0 0"/> -->
+   <parent link="${arm_id}_link_new"/>
+   <child link="${arm_id}_link7"/>
+   <axis xyz="0 0 1"/>
+   <xacro:franka-limits config="${joint_limits}" name="joint7"/>
+   <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
+  </joint>
+  <link name="${arm_id}_link8"/>
+  <joint name="${arm_id}_joint8" type="fixed">
+   <origin rpy="0 0 0" xyz="0 0 0.107"/>
+   <parent link="${arm_id}_link7"/>
+   <child link="${arm_id}_link8"/>
+  </joint>
+ </xacro:macro>
+</robot>

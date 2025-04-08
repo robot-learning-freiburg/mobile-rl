@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find fmm_moveit_config)/launch/move_group.launch" />
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find modulation_rl)/rviz/rviz_config.rviz" if="$(arg gui)"/>
+    <node pkg="modulation_rl" type="interactive_marker_node" name="interactive_marker_node" output="screen" if="$(arg gui)" />
+</launch>

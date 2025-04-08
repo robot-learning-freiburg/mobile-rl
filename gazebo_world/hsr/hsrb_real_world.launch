@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="use_map" default="false" />
+    <arg name="map_name" default="aisoffice_new_modified" />
+    <arg name="marker_id" default="14" />
+
+    <include file="$(find modulation_rl)/gazebo_world/hsr/hsr_move_group.launch">
+        <arg name="joint_states_topic" value="/hsrb/robot_state/joint_states" />
+    </include>
+
+    <include file="$(find modulation_rl)/gazebo_world/hsr/costmap/costmap_2d.launch">
+        <arg name="use_map_frame" value="$(arg use_map)" />
+    </include>
+
+    <!-- For moveit executions etc. publish the state to /joint_states as well -->
+    <node pkg="topic_tools" type="relay" name="relay_joint_states_arm" args="hsrb/joint_states joint_states" />
+
+    <!-- interactive marker to get user goals -->
+    <node pkg="modulation_rl" type="interactive_marker_node" name="interactive_marker_node" output="screen" />
+    <!-- node to turn head towards goal -->
+    <group>
+        <param name="robot_name" value="hsr"/>
+        <param name="ar_marker_frame" value="ar_marker/$(arg marker_id)"/>
+        <param name="ar_marker_camera_frame" value="head_center_camera_frame"/>
+<!--        <param name="ar_marker_frame" value="aruco_marker_frame"/>-->
+<!--        <param name="ar_marker_camera_frame" value="head_rgbd_sensor_rgb_frame"/>-->
+        <node name="camera_goalpointer" pkg="modulation_rl" type="camera_goalpointer.py"/>
+    </group>
+
+<!--    <include file="$(find aruco_ros)/launch/hsr.launch">-->
+<!--        <arg name="markerId" value="$(arg markerId)"/>-->
+<!--        <arg name="markerSize" value="$(arg markerSize)"/>-->
+<!--    </include>-->
+
+    <node name="node_killer2" pkg="modulation_rl" type="kill_unnecessary_nodes.sh" />
+    <!-- NOTE: First run rosnode kill /pose_integrator ! Also change /costmap_node/costmap/global_frame and /costmap_node_global/costmap/global_frame from odom to map in costmap_2d.launch to get correct local map!  -->
+    <group if="$(arg use_map)">
+        <node name="node_killer" pkg="modulation_rl" type="kill_pose_integrator.sh" />
+        <node name="map_server" pkg="map_server" type="map_server" args="$(find modulation_rl)/gazebo_world/worlds/$(arg map_name).yaml"/>
+        <include file="$(find modulation_rl)/gazebo_world/hsr/amcl.launch"/>
+    </group>
+<!--    <group unless="$(arg use_map)">-->
+<!--        <node pkg="tf" type="static_transform_publisher" name="static_map_tf_publisher" args="0 0 0 0 0 0 1 'map' 'odom' 100"/>-->
+<!--    </group>-->
+</launch>

@@ -1,0 +1,305 @@
+<?xml version="1.0"?>
+<robot name="hand" xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:include filename="$(find hsrb_description)/urdf/hand_v0/hand.transmission.xacro"/>
+    <xacro:include filename="$(find modulation_rl)/gazebo_world/hsr/robot/hand.gazebo.xacro"/>
+
+    <xacro:include filename="$(find hsrb_parts_description)/urdf/sensors/wide_camera.urdf.xacro"/>
+
+    <xacro:property name="palm_to_proximal_x" value="-0.01675" />
+    <xacro:property name="palm_to_proximal_y" value="-0.0245" />
+    <xacro:property name="palm_to_proximal_z" value="-0.0175" />
+
+    <!-- soft limit:-0.1 = proximal_joint_angle_range_min + spring_proximal_joint_angle_range_max -->
+    <xacro:property name="proximal_joint_angle_range_min" value="-0.798" />
+    <xacro:property name="proximal_joint_angle_range_max" value="1.24" />
+    <xacro:property name="spring_proximal_joint_angle_range_min" value="0.0" />
+    <xacro:property name="spring_proximal_joint_angle_range_max" value="0.698" />
+    <xacro:property name="distal_joint_angle_offset" value="0.087" />
+
+    <!-- dummy link -->
+    <xacro:macro name="hsrb_gripper_dummy_link" params="name">
+        <link name="${name}">
+            <inertial>
+                <mass value="0.01"/>
+                <inertia
+                    ixx="0.0015" ixy="0.0" ixz="0.0"
+                    iyy="0.0015" iyz="0.0" izz="0.0015"/>
+            </inertial>
+        </link>
+    </xacro:macro>
+
+    <!-- gripper base -->
+    <xacro:macro name="hsrb_gripper_base" params="prefix parent *origin">
+        <joint name="${prefix}_palm_joint" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}" />
+            <child link="${prefix}_palm_link" />
+        </joint>
+
+        <link name="${prefix}_palm_link">
+            <inertial>
+                <mass value="0.15"/>
+                <inertia
+                    ixx="0.015" ixy="0.0" ixz="0.0"
+                    iyy="0.015" iyz="0.0" izz="0.015"/>
+            </inertial>
+
+            <visual>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/palm_light.dae" />
+                </geometry>
+            </visual>
+
+            <collision>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/palm.stl" />
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="${prefix}_motor_joint" type="revolute">
+            <axis xyz="1.0 0.0 0.0" />
+            <limit effort="100.0" velocity="1.0"
+                lower="${proximal_joint_angle_range_min}"
+                upper="${proximal_joint_angle_range_max}" />
+            <parent link="${prefix}_palm_link" />
+            <child link="${prefix}_motor_dummy_link" />
+            <dynamics damping="0.0001"/>
+        </joint>
+
+        <!-- dummy link -->
+        <xacro:hsrb_gripper_dummy_link name="${prefix}_motor_dummy_link" />
+    </xacro:macro>
+
+    <xacro:macro name="hsrb_hand" params="prefix parent *origin">
+        <xacro:hsrb_gripper_base prefix="${prefix}" parent="${parent}">
+            <xacro:insert_block name="origin" />
+        </xacro:hsrb_gripper_base>
+
+        <xacro:hsrb_finger_with_vacuum prefix="${prefix}" suffix="l" parent="${prefix}_palm_link">
+            <origin xyz="${palm_to_proximal_x} ${palm_to_proximal_y} ${palm_to_proximal_z}"
+                rpy="0.0 0.0 0.0" />
+        </xacro:hsrb_finger_with_vacuum>
+
+        <xacro:hsrb_finger_without_vacuum prefix="${prefix}" suffix="r" parent="${prefix}_palm_link">
+            <origin xyz="${palm_to_proximal_x} ${-palm_to_proximal_y} ${palm_to_proximal_z}"
+                rpy="0.0 0.0 0.0" />
+        </xacro:hsrb_finger_without_vacuum>
+
+        <!-- camera -->
+        <xacro:wide_camera prefix="${prefix}" parent="${prefix}_palm_link" robot_namespace="${personal_name}/${robot_name}" rpy="${pi/2.0} ${-pi/2.0} 0" >
+            <origin xyz="0.039 0.0 -0.0045" rpy="0.0 0.0 0.0"/>
+        </xacro:wide_camera>
+
+        <xacro:hsrb_hand_gazebo prefix="${prefix}"/>
+        <xacro:hsrb_hand_transmission prefix="${prefix}"/>
+    </xacro:macro>
+
+    <!-- gripper finger proximal base -->
+    <xacro:macro name="hsrb_finger_proximal_base" params="prefix suffix parent *origin *axis">
+        <joint name="${prefix}_${suffix}_proximal_joint" type="revolute">
+            <xacro:insert_block name="origin" />
+            <xacro:insert_block name="axis" />
+            <limit effort="100.0" velocity="1.0"
+                lower="${proximal_joint_angle_range_min}"
+                upper="${proximal_joint_angle_range_max}" />
+            <parent link="${parent}" />
+            <child link="${prefix}_${suffix}_proximal_link" />
+            <mimic joint="${prefix}_motor_joint" />
+            <dynamics damping="0.0001"/>
+        </joint>
+
+        <!-- dummy link -->
+        <xacro:hsrb_gripper_dummy_link name="${prefix}_${suffix}_proximal_link" />
+
+        <joint name="${prefix}_${suffix}_spring_proximal_joint" type="revolute">
+            <xacro:insert_block name="axis" />
+            <limit effort="10.0" velocity="1.0"
+                lower="${spring_proximal_joint_angle_range_min}"
+                upper="${spring_proximal_joint_angle_range_max}" />
+            <parent link="${prefix}_${suffix}_proximal_link" />
+            <child link="${prefix}_${suffix}_spring_proximal_link" />
+            <dynamics damping="0.0001"/>
+        </joint>
+    </xacro:macro>
+
+    <!-- gripper finger distal base -->
+    <xacro:macro name="hsrb_finger_distal_base" params="prefix suffix parent *origin *axis">
+        <joint name="${prefix}_${suffix}_mimic_distal_joint" type="revolute">
+            <xacro:insert_block name="origin" />
+            <xacro:insert_block name="axis" />
+            <limit effort="100.0" velocity="1.0"
+                lower="${-spring_proximal_joint_angle_range_max}"
+                upper="${-spring_proximal_joint_angle_range_min}" />
+            <parent link="${parent}" />
+            <child link="${prefix}_${suffix}_mimic_distal_link" />
+            <mimic joint="${prefix}_${suffix}_spring_proximal_joint" multiplier="-1.0" />
+            <dynamics damping="0.0001"/>
+        </joint>
+
+        <!-- dummy link -->
+        <xacro:hsrb_gripper_dummy_link name="${prefix}_${suffix}_mimic_distal_link" />
+
+        <joint name="${prefix}_${suffix}_distal_joint" type="revolute">
+            <xacro:insert_block name="axis" />
+            <limit effort="100.0" velocity="1.0"
+                lower="${-proximal_joint_angle_range_max}"
+                upper="${-proximal_joint_angle_range_min}" />
+            <parent link="${prefix}_${suffix}_mimic_distal_link" />
+            <child link="${prefix}_${suffix}_distal_link" />
+            <mimic joint="${prefix}_motor_joint" multiplier="-1.0" offset="${-distal_joint_angle_offset}"/>
+            <dynamics damping="0.0001"/>
+        </joint>
+    </xacro:macro>
+
+    <!-- finger with vacuum -->
+    <xacro:macro name="hsrb_finger_with_vacuum" params="prefix suffix parent *origin">
+        <xacro:hsrb_finger_proximal_base prefix="${prefix}" suffix="${suffix}" parent="${parent}">
+            <xacro:insert_block name="origin" />
+            <axis xyz="1.0 0.0 0.0" />
+        </xacro:hsrb_finger_proximal_base>
+
+        <link name="${prefix}_${suffix}_spring_proximal_link">
+            <inertial>
+                <mass value="0.043589"/>
+                <origin xyz="0.021418 0.00248 0.022688"/>
+                <inertia
+                    ixx="0.000026033886" ixy="-0.000000144078" ixz="-0.00000198241"
+                    iyy="0.000028824811" iyz="-0.000001268421" izz="0.000005135919"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/l_proximal.dae" />
+                </geometry>
+            </visual>
+
+            <collision>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/l_proximal.stl" />
+                </geometry>
+            </collision>
+        </link>
+
+        <xacro:hsrb_finger_distal_base prefix="${prefix}" suffix="${suffix}" parent="${prefix}_${suffix}_spring_proximal_link">
+            <origin xyz="0.0 0.0 0.07" />
+            <axis xyz="1.0 0.0 0.0" />
+        </xacro:hsrb_finger_distal_base>
+
+        <link name="${prefix}_${suffix}_distal_link">
+            <inertial>
+                <mass value="0.027731"/>
+                <origin xyz="0.011116 0.005679 0.017532"/>
+                <inertia
+                    ixx="0.000004451952" ixy="-0.000000617574" ixz="0.000000503765"
+                    iyy="0.000000503765" iyz="-0.000000435048" izz="0.000004456764"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/l_distal.dae" />
+                </geometry>
+            </visual>
+
+            <collision>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/l_distal.stl" />
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="${prefix}_${suffix}_finger_tip_frame_joint" type="fixed">
+            <origin xyz="0.01675 0.01865 0.04289" rpy="${-pi/2.0} 0.0 0.0" />
+            <parent link="${prefix}_${suffix}_distal_link" />
+            <child link="${prefix}_${suffix}_finger_tip_frame" />
+            <dynamics damping="0.0001"/>
+        </joint>
+
+        <!-- TODO: this is the right format: <link name="${prefix}_${suffix}_finger_tip_frame" /> -->
+        <xacro:hsrb_gripper_dummy_link name="${prefix}_${suffix}_finger_tip_frame" />
+
+        <joint name="${prefix}_${suffix}_finger_vacuum_frame_joint" type="fixed">
+            <origin xyz="0.00475 -0.011539 0.03322" rpy="${pi/4.0} 0.0 0.0" />
+            <parent link="${prefix}_${suffix}_distal_link" />
+            <child link="${prefix}_${suffix}_finger_vacuum_frame" />
+        </joint>
+
+        <link name="${prefix}_${suffix}_finger_vacuum_frame">
+            <inertial>
+                <mass value="0.01"/>
+                <inertia
+                    ixx="0.0015" ixy="0.0" ixz="0.0"
+                    iyy="0.0015" iyz="0.0" izz="0.0015"/>
+            </inertial>
+            <visual>
+                <origin xyz="0.0 0.0 -0.01" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <box size="0.008 0.008 0.02"/>
+                </geometry>
+                <material name="body_sub" />
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <!-- finger without vacuum -->
+    <xacro:macro name="hsrb_finger_without_vacuum" params="prefix suffix parent *origin">
+        <xacro:hsrb_finger_proximal_base prefix="${prefix}" suffix="${suffix}" parent="${parent}">
+            <xacro:insert_block name="origin" />
+            <axis xyz="-1.0 0.0 0.0" />
+        </xacro:hsrb_finger_proximal_base>
+
+        <link name="${prefix}_${suffix}_spring_proximal_link">
+            <inertial>
+                <mass value="0.043956"/>
+                <origin xyz="0.013203 0.002096 0.023311"/>
+                <inertia
+                    ixx="0.00002623664" ixy="0.00000001631" ixz="0.000001281845"
+                    iyy="0.000028838232" iyz="-0.000001621709" izz="0.000004957151"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/r_proximal.dae" />
+                </geometry>
+            </visual>
+
+            <collision>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/r_proximal.stl" />
+                </geometry>
+            </collision>
+        </link>
+
+        <xacro:hsrb_finger_distal_base prefix="${prefix}" suffix="${suffix}" parent="${prefix}_${suffix}_spring_proximal_link">
+            <origin xyz="0.0 0.0 0.07" />
+            <axis xyz="-1.0 0.0 0.0" />
+        </xacro:hsrb_finger_distal_base>
+
+        <link name="${prefix}_${suffix}_distal_link">
+            <inertial>
+                <mass value="0.020927"/>
+                <origin xyz="0.014256 -0.008321 0.015591"/>
+                <inertia
+                    ixx="0.00000307518" ixy="-0.00000004954" ixz="0.000000009481"
+                    iyy="0.000004074079" iyz="0.000000843648" izz="0.000002807795"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/r_distal.dae" />
+                </geometry>
+            </visual>
+
+            <collision>
+                <geometry>
+                    <mesh filename="package://hsrb_description/meshes/hand_v0/r_distal.stl" />
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="${prefix}_${suffix}_finger_tip_frame_joint" type="fixed">
+            <origin xyz="0.01675 -0.01865 0.04289" rpy="${pi/2.0} 0.0 0.0" />
+            <parent link="${prefix}_${suffix}_distal_link" />
+            <child link="${prefix}_${suffix}_finger_tip_frame" />
+        </joint>
+
+        <!-- TODO: this is the right format: <link name="${prefix}_${suffix}_finger_tip_frame" /> -->
+        <xacro:hsrb_gripper_dummy_link name="${prefix}_${suffix}_finger_tip_frame" />
+    </xacro:macro>
+</robot>

@@ -1,0 +1,48 @@
+<!-- copied from planning_context.launch -->
+<launch>
+  <!-- By default we do not overwrite the URDF. Change the following to true to change the default behavior -->
+  <arg name="load_robot_description" default="true"/>
+
+  <!-- The name of the parameter under which the URDF is loaded -->
+  <arg name="robot_description_name" default="robot_description"/>
+
+  <arg name="robot_description_path" default="$(find fmm_description)/urdf/fmm.urdf.xacro" />
+
+  <!-- Load universal robot description format (URDF) -->
+  <param if="$(arg load_robot_description)" name="$(arg robot_description_name)" command="xacro ros_distro:=noetic '$(find fmm_description)/urdf/fmm.urdf.xacro'"/>
+
+  <!-- The semantic description that corresponds to the URDF -->
+  <param name="$(arg robot_description_name)_semantic" textfile="$(find fmm_moveit_config)/config/fmm.srdf" />
+
+  <!-- Load updated joint limits (override information from URDF) -->
+  <group ns="$(arg robot_description_name)_planning">
+    <rosparam command="load" file="$(find fmm_moveit_config)/config/joint_limits.yaml"/>
+    <rosparam command="load" file="$(find fmm_moveit_config)/config/cartesian_limits.yaml"/>
+  </group>
+
+  <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
+  <group ns="$(arg robot_description_name)_kinematics">
+    <rosparam command="load" file="$(find fmm_moveit_config)/config/kinematics.yaml"/>
+
+  </group> 
+
+  <!-- Launch the joint state publisher -->  
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="true"/>
+    <!-- <param name="source_list" value="['/initial_positions/panda_joint1',
+                                       '/initial_positions/panda_joint2',
+                                       '/initial_positions/panda_joint3',
+                                       '/initial_positions/panda_joint4',
+                                       '/initial_positions/panda_joint5',
+                                       '/initial_positions/panda_joint6',
+                                       '/initial_positions/panda_joint7']"/> -->
+  </node>
+
+  <!-- Launch the robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fmm_description)/rviz/view_base.rviz">
+    <!-- <remap from="base_scan" to="$(arg namespace)/base_scan"/> -->
+  </node>
+</launch>
+

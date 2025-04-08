@@ -1,0 +1,17 @@
+.devcontainer/devcontainer.json
+# file types
+*.pyc
+# directories
+logs/
+wandb/
+/scripts/paper_n1/
+/scripts/paper_n2/
+/scripts/real_world_logs/
+.idea_pycharm/
+.idea_clion/
+.idea/
+# files
+Tims_pr2_arm_base_control.cpp
+/scripts/model_checkpoints/graspHack
+build/
+# .devcontainer/

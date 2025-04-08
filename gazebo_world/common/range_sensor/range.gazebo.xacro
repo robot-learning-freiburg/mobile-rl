@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<!--
+  Copyright (c) 2011, PAL Robotics, S.L.
+  All rights reserved.
+
+  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+  Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+-->
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="range_gazebo" params="name ros_topic update_rate maxRange minRange fov radiation" >
+    <gazebo reference="${name}_link">
+      <sensor type="ray" name="${name}">
+        <pose>0 0 0 0 0 0</pose>
+        <update_rate>${update_rate}</update_rate>
+        <visualize>false</visualize>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>5</samples>
+              <resolution>1</resolution>
+              <min_angle>-${fov/2}</min_angle>
+              <max_angle>${fov/2}</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>5</samples>
+              <resolution>1</resolution>
+              <min_angle>-${fov/2}</min_angle>
+              <max_angle>${fov/2}</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>${minRange}</min>
+            <max>${maxRange}</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+        <plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range">
+          <gaussianNoise>0.005</gaussianNoise>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>${update_rate}</updateRate>
+          <topicName>${ros_topic}</topicName>
+          <frameName>${name}_link</frameName>
+          <minRange>${minRange}</minRange>
+          <maxRange>${maxRange}</maxRange>
+          <fov>${fov}</fov>
+          <radiation>${radiation}</radiation>
+        </plugin>
+      </sensor>
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

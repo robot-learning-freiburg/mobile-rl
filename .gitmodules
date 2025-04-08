@@ -1,0 +1,3 @@
+[submodule "sensor-to-cloud"]
+	path = ros_pkgs/sensor-to-cloud
+	url = git@gitlab.com:pal-robotics/opendr/sensor-to-cloud.git

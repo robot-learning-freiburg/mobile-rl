@@ -1,0 +1,8 @@
+# Independent settings for the local costmap
+#local_costmap:
+global_frame: odom
+
+obstacle_laser_layer:
+  base_scan:
+    raytrace_range: 10.0
+    obstacle_range: 10.0

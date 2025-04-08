@@ -1,0 +1,592 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.10.11
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.7.13
+acceleration_penalty:
+  desc: null
+  value: 0.05
+algo:
+  desc: null
+  value: sac
+articulated_collision_delta:
+  desc: null
+  value: 0.001
+articulated_collision_mu:
+  desc: null
+  value: 500
+articulated_jv_delta:
+  desc: null
+  value: 0.001
+articulated_jv_mu:
+  desc: null
+  value: 0.01
+articulated_min_step:
+  desc: null
+  value: 0.01
+articulated_time_horizon:
+  desc: null
+  value: 4.0
+batch_size:
+  desc: null
+  value: 256
+bi2rrt_extend_step_factor:
+  desc: null
+  value: 0.4
+bioik_avoid_joint_limits_weight:
+  desc: null
+  value: 1.0
+bioik_center_joints_weight:
+  desc: null
+  value: 0.0
+bioik_regularization_type:
+  desc: null
+  value: mindispl
+bioik_regularization_weight:
+  desc: null
+  value: 1.0
+buffer_size:
+  desc: null
+  value: 10000
+collision_penalty:
+  desc: null
+  value: 10
+concat_plan:
+  desc: null
+  value: false
+concat_prev_action:
+  desc: null
+  value: true
+debug:
+  desc: null
+  value: false
+device:
+  desc: null
+  value: cuda
+dry_run:
+  desc: null
+  value: false
+ent_coef:
+  desc: null
+  value: auto
+ent_lr:
+  desc: null
+  value: null
+env:
+  desc: null
+  value: fmm
+eval_execs:
+  desc: null
+  value:
+  - sim
+eval_seed:
+  desc: null
+  value: 999
+eval_tasks:
+  desc: null
+  value:
+  - rndstartrndgoal
+  - picknplace
+  - roomDoor
+  # - door
+  - drawer
+evaluation_frequency:
+  desc: null
+  value: 75000
+evaluation_only:
+  desc: null
+  value: true
+exec_acceleration_clip:
+  desc: null
+  value: null
+exec_action_clip:
+  desc: null
+  value: null
+exec_action_scaling:
+  desc: null
+  value: null
+execute_style:
+  desc: null
+  value: track
+explore_noise:
+  desc: null
+  value: 0.0
+explore_noise_final_scale:
+  desc: null
+  value: 1.0
+explore_noise_type:
+  desc: null
+  value: egreedy
+fcnet_hiddens:
+  desc: null
+  value:
+  - 512
+  - 512
+  - 256
+finetune_from_run:
+  desc: null
+  value: null
+frame_skip:
+  desc: null
+  value: 0
+frame_skip_curriculum:
+  desc: null
+  value: 0
+frame_skip_observe:
+  desc: null
+  value: true
+gamma:
+  desc: null
+  value: 0.99
+global_map_resolution:
+  desc: null
+  value: 0.025
+group:
+  desc: null
+  value: fmm_acceleration_penalty:0.05_buffer_size:10000_learn_torso:T_learn_vel_norm:0.1_checkpoint-1000_nr_v15.0
+ik_fail_thresh:
+  desc: null
+  value: 20
+ik_fail_thresh_eval:
+  desc: null
+  value: 50
+ikslack_dist:
+  desc: null
+  value: 0.1
+ikslack_penalty_multiplier:
+  desc: null
+  value: 1.0
+ikslack_rot_dist:
+  desc: null
+  value: 0.05
+ikslack_sol_dist_reward:
+  desc: null
+  value: l2
+iksolver:
+  desc: null
+  value: bioik
+init_controllers:
+  desc: null
+  value: false
+initial_alpha:
+  desc: null
+  value: 1.0
+learn_joint_values:
+  desc: null
+  value: false
+learn_torso:
+  desc: null
+  value: true
+learn_vel_norm:
+  desc: null
+  value: 0.1
+local_map_resolution:
+  desc: null
+  value: 0.025
+logpath:
+  desc: null
+  value: /workspaces/modulation_rl/scripts/logs
+lr_end:
+  desc: null
+  value: 1.0e-06
+lr_start:
+  desc: null
+  value: 0.0001
+mapencoder:
+  desc: null
+  value: localdouble
+model_file:
+  desc: null
+  value: false
+moveit_max_waypoint_distance:
+  desc: null
+  value: 0.2
+moveit_num_planning_attempts:
+  desc: null
+  value: 10
+moveit_orientation_constraint:
+  desc: null
+  value: false
+moveit_planner:
+  desc: null
+  value: rrtconnect
+moveit_range:
+  desc: null
+  value: -1
+name:
+  desc: null
+  value: ''
+name_suffix:
+  desc: null
+  value: ''
+no_done_at_end:
+  desc: null
+  value: true
+nr_evaluations:
+  desc: null
+  value: 30
+nstep:
+  desc: null
+  value: 1
+num_cpus_per_worker:
+  desc: null
+  value: 1
+num_envs_per_worker:
+  desc: null
+  value: 1
+num_gpus:
+  desc: null
+  value: 1.0
+num_gpus_per_worker:
+  desc: null
+  value: 0
+num_workers:
+  desc: null
+  value: 4
+obstacle_config:
+  desc: null
+  value: rnd
+overlay_plan:
+  desc: null
+  value: false
+penalty_scaling:
+  desc: null
+  value: 0.0
+perception_style:
+  desc: null
+  value: base
+planner_max_iterations_time:
+  desc: null
+  value: 200
+prioritizedrp:
+  desc: null
+  value: false
+project_name:
+  desc: null
+  value: mobile_rl
+ray:
+  desc: null
+  value:
+    __stderr_file__: null
+    __stdout_file__: null
+    __trial_info__: <ray.tune.trial.TrialInfo object at 0x7f5682e723d0>
+    _use_beta_distribution: false
+    buffer_size: 10000
+    callbacks: <class 'modulation.myray.ray_callbacks.TrainCallback'>
+    clip_actions: false
+    clip_rewards: null
+    compress_observations: false
+    custom_eval_function: null
+    env: modulation_rl_env
+    env_config:
+      acceleration_penalty: 0.05
+      algo: sac
+      bioik_avoid_joint_limits_weight: 1.0
+      bioik_center_joints_weight: 0.0
+      bioik_regularization_type: mindispl
+      bioik_regularization_weight: 1.0
+      collision_penalty: 10
+      concat_plan: false
+      concat_prev_action: true
+      env: fmm
+      eval: false
+      frame_skip: 0
+      frame_skip_curriculum: 0
+      frame_skip_observe: true
+      gamma: 0.99
+      global_map_resolution: 0.025
+      head_start: 0
+      ik_fail_thresh: 20
+      ikslack_dist: 0.1
+      ikslack_penalty_multiplier: 1.0
+      ikslack_rot_dist: 0.05
+      ikslack_sol_dist_reward: l2
+      iksolver: bioik
+      init_controllers: false
+      learn_joint_values: false
+      learn_torso: true
+      learn_vel_norm: 0.1
+      local_map_resolution: 0.025
+      node_handle: train_env
+      obstacle_config: rnd
+      overlay_plan: false
+      penalty_scaling: 0.0
+      seed: 740
+      selfcollision_as_failure: false
+      simpleobstacle_offsetstd: 0.4375
+      simpleobstacle_spacing: 1.75
+      start_level: 0
+      task: simpleobstacle
+      time_step: 0.02
+      transition_noise_base: 0.04
+      use_fwd_orientation: false
+      use_map_obs: true
+      vis_env: false
+      world_type: sim
+    env_task_fn: null
+    evaluation_config:
+      callbacks: <class 'modulation.myray.ray_callbacks.EvalCallback'>
+      env_config:
+        eval: true
+        eval_seed: 999
+        frame_skip: 0
+        ik_fail_thresh: 20
+        node_handle: eval_env
+        simpleobstacle_offsetstd: 0.4375
+        simpleobstacle_spacing: 1.75
+        task: simpleobstacle
+        transition_noise_base: 0.0
+        wandb_config:
+          acceleration_penalty: 0.05
+          algo: sac
+          articulated_collision_delta: 0.001
+          articulated_collision_mu: 500
+          articulated_jv_delta: 0.001
+          articulated_jv_mu: 0.01
+          articulated_min_step: 0.01
+          articulated_time_horizon: 4.0
+          batch_size: 256
+          bi2rrt_extend_step_factor: 0.4
+          bioik_avoid_joint_limits_weight: 1.0
+          bioik_center_joints_weight: 0.0
+          bioik_regularization_type: mindispl
+          bioik_regularization_weight: 1.0
+          buffer_size: 10000
+          collision_penalty: 10
+          concat_plan: false
+          concat_prev_action: true
+          debug: false
+          device: cuda
+          dry_run: false
+          ent_coef: auto
+          ent_lr: null
+          env: fmm
+          eval_execs:
+          - sim
+          eval_seed: 999
+          eval_tasks:
+          - rndstartrndgoal
+          - picknplace
+          - roomDoor
+          # - door
+          - drawer
+          evaluation_frequency: 75000
+          evaluation_only: true
+          exec_acceleration_clip: null
+          exec_action_clip: null
+          exec_action_scaling: null
+          execute_style: track
+          explore_noise: 0.0
+          explore_noise_final_scale: 1.0
+          explore_noise_type: egreedy
+          fcnet_hiddens:
+          - 512
+          - 512
+          - 256
+          finetune_from_run: null
+          frame_skip: 0
+          frame_skip_curriculum: 0
+          frame_skip_observe: true
+          gamma: 0.99
+          global_map_resolution: 0.025
+          group: fmm_acceleration_penalty:0.05_buffer_size:10000_learn_torso:T_learn_vel_norm:0.1_checkpoint-1000_nr_v15.0
+          ik_fail_thresh: 20
+          ik_fail_thresh_eval: 50
+          ikslack_dist: 0.1
+          ikslack_penalty_multiplier: 1.0
+          ikslack_rot_dist: 0.05
+          ikslack_sol_dist_reward: l2
+          iksolver: bioik
+          init_controllers: false
+          initial_alpha: 1.0
+          learn_joint_values: false
+          learn_torso: true
+          learn_vel_norm: 0.1
+          local_map_resolution: 0.025
+          logpath: /workspaces/modulation_rl/scripts/logs
+          lr_end: 1.0e-06
+          lr_start: 0.0001
+          mapencoder: localdouble
+          model_file: checkpoint-1000
+          moveit_max_waypoint_distance: 0.2
+          moveit_num_planning_attempts: 10
+          moveit_orientation_constraint: false
+          moveit_planner: rrtconnect
+          moveit_range: -1
+          name: ''
+          name_suffix: ''
+          no_done_at_end: true
+          nr_evaluations: 30
+          nstep: 1
+          num_cpus_per_worker: 1
+          num_envs_per_worker: 1
+          num_gpus: 1.0
+          num_gpus_per_worker: 0
+          num_workers: 4
+          obstacle_config: rnd
+          overlay_plan: false
+          penalty_scaling: 0.0
+          perception_style: base
+          planner_max_iterations_time: 200
+          prioritizedrp: false
+          project_name: mobile_rl
+          ray_verbosity: 1
+          resume_id: null
+          resume_model_name: last_model.zip
+          rnd_steps: 0
+          seed: 740
+          selfcollision_as_failure: false
+          simpleobstacle_offsetstd: 0.4375
+          simpleobstacle_spacing: 1.75
+          target_ent: auto
+          task: roomDoor
+          tau: 0.001
+          time_step: 0.02
+          total_steps: 1000000
+          training_intensity: 1
+          transition_noise_base: 0.04
+          use_fwd_orientation: false
+          use_map_obs: true
+          version: '15.0'
+          vis_env: false
+          world_type: sim
+      explore: false
+    evaluation_interval: 75
+    evaluation_num_episodes: 30
+    evaluation_num_workers: 1
+    evaluation_parallel_to_training: true
+    exploration_config:
+      final_scale: 1.0
+      initial_scale: 1.0
+      random_timesteps: 0
+      scale_timesteps: 1000000
+      stddev: 0.0
+      type: modulation.myray.noise_types.EpsilonGreedyNoise
+    explore: true
+    final_prioritized_replay_beta: 0.4
+    framework: torch
+    gamma: 0.99
+    grad_clip: 10
+    in_evaluation: false
+    initial_alpha: 1.0
+    learning_starts: 0
+    log_level: INFO
+    lr_end: 1.0e-06
+    lr_schedule:
+    - - - 0
+        - 0.0001
+      - - 1000000
+        - 1.0e-06
+    - - - 0
+        - 0.0001
+      - - 1000000
+        - 1.0e-06
+    - - - 0
+        - 0.0001
+      - - 1000000
+        - 1.0e-06
+    - - - 0
+        - 0.0001
+      - - 1000000
+        - 1.0e-06
+    lr_step: 1000000
+    model:
+      custom_model: map_encoder_sac_torch_network
+      custom_model_config:
+        custom_model: ray_map_encoder
+        custom_model_config:
+          map_encoder: localdouble
+        post_fcnet_activation: relu
+        post_fcnet_hiddens:
+        - 512
+        - 512
+        - 256
+    n_step: 1
+    no_done_at_end: true
+    normalize_actions: true
+    num_cpus_per_worker: 1
+    num_envs_per_worker: 1
+    num_gpus: 1.0
+    num_gpus_per_worker: 0
+    num_workers: 4
+    observation_filter: NoFilter
+    optimization:
+      actor_learning_rate: 0.0001
+      critic_learning_rate: 0.0001
+      entropy_learning_rate: 0.0001
+    prioritized_replay: false
+    prioritized_replay_alpha: 0.6
+    prioritized_replay_beta: 0.4
+    prioritized_replay_beta_annealing_timesteps: 200000
+    prioritized_replay_eps: 1.0e-06
+    seed: 740
+    target_entropy: auto
+    tau: 0.001
+    timesteps_per_iteration: 1000
+    train_batch_size: 256
+    training_intensity: 256
+ray_verbosity:
+  desc: null
+  value: 1
+resume_id:
+  desc: null
+  value: null
+resume_model_name:
+  desc: null
+  value: null
+rnd_steps:
+  desc: null
+  value: 0
+seed:
+  desc: null
+  value: 740
+selfcollision_as_failure:
+  desc: null
+  value: false
+simpleobstacle_offsetstd:
+  desc: null
+  value: 0.4375
+simpleobstacle_spacing:
+  desc: null
+  value: 1.75
+target_ent:
+  desc: null
+  value: auto
+task:
+  desc: null
+  value: roomDoor
+tau:
+  desc: null
+  value: 0.001
+time_step:
+  desc: null
+  value: 0.02
+total_steps:
+  desc: null
+  value: 1000000
+training_intensity:
+  desc: null
+  value: 1
+transition_noise_base:
+  desc: null
+  value: 0.04
+use_fwd_orientation:
+  desc: null
+  value: false
+use_map_obs:
+  desc: null
+  value: true
+version:
+  desc: null
+  value: '15.0'
+vis_env:
+  desc: null
+  value: false
+world_type:
+  desc: null
+  value: sim

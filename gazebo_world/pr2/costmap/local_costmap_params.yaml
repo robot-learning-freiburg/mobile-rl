@@ -1,0 +1,14 @@
+# original file: pr2_navigation_local/config/local_costmap_params.yaml
+#local_costmap:
+publish_voxel_map: false
+global_frame: map  # odom_combined
+#  update_frequency: 50.0  # 5.0
+#  publish_frequency: 50.0  # 2.0
+#  static_map: false
+#  rolling_window: true
+#  # NOTE: does not seem to support fractions (e.g. 2.5)
+#  width: 3.0  # 10.0
+#  height: 3.0  # 10.0
+#  resolution: 0.025 # 0.025
+origin_x: 0.0
+origin_y: 0.0

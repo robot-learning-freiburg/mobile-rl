@@ -1,0 +1,137 @@
+Omni_Drive:
+  - name: [115, 0, 0]
+    avg_manipulability: 6.096190998754259
+    info:
+      arm_pitch: 1.2566
+      arm_yaw: -0.6458
+      tower_yaw: -0.5585
+      tower_yValue: -0.05
+      tower_xValue: 0.04
+      end_effector_mount: 1.5708
+
+  - name: [38, 0, 0]
+    avg_manipulability: 6.088175802062686
+    info:
+      arm_pitch: 0.9076
+      arm_yaw: -0.7679
+      tower_yaw: -0.4538
+      tower_yValue: -0.05
+      tower_xValue: 0.1
+      end_effector_mount: 1.5708
+
+  - name: [76, 0, 0]
+    avg_manipulability: 6.087658504203052
+    info:
+      arm_pitch: 0.8552
+      arm_yaw: -0.6283
+      tower_yaw: -0.6632
+      tower_yValue: -0.02
+      tower_xValue: 0.03
+      end_effector_mount: 1.5708
+
+Diff_Drive:
+  - name: [21, 0, 0]
+    avg_manipulability: 5.9097376577880185
+    info:
+      arm_pitch: 1.4486
+      arm_yaw: -1.2566
+      tower_yaw: 0.2094
+      tower_yValue: 0.18
+      tower_xValue: 0.14
+      end_effector_mount: 0.4887
+
+  - name: [52, 0, 0]
+    avg_manipulability: 5.873618907218778
+    info:
+      arm_pitch: 1.5533
+      arm_yaw: -1.1868
+      tower_yaw: 0.0349
+      tower_yValue: 0.18
+      tower_xValue: 0.15
+      end_effector_mount: 0.5934
+
+  - name: [109, 0, 0]
+    avg_manipulability: 5.870428696554878
+    info:
+      arm_pitch: 1.5359
+      arm_yaw: 0.0349
+      tower_yaw: 0.0873
+      tower_yValue: 0.11
+      tower_xValue: 0.15
+      end_effector_mount: 0.9425
+UR_5:
+  - name: [20, 0, 0]
+    loss: 3.939573030300126
+    avg_manipulability: 6.362561818199243
+    info:
+      arm_pitch: 0.7156
+      arm_yaw: 1.5359
+      tower_yaw: -0.5236
+      tower_yValue: -0.12
+      tower_xValue: 0.12
+      end_effector_mount: 0.4712
+
+  - name: [146, 0, 0]
+    loss: 3.9644378323770084
+    avg_manipulability: 6.2133730057379495
+    info:
+      arm_pitch: 0.0524
+      arm_yaw: 1.4835
+      tower_yaw: -0.2269
+      tower_yValue: -0.11
+      tower_xValue: -0.03
+      end_effector_mount: 0.3491
+
+  - name: [24, 0, 0]
+    loss: 4.154020738606299
+    avg_manipulability: 5.075875568362211
+    info:
+      arm_pitch: 0.3491
+      arm_yaw: 0.8203
+      tower_yaw: 1.0297
+      tower_yValue: -0.11
+      tower_xValue: 0.15
+      end_effector_mount: 0.5585
+
+# [[93, 0, 0], 1000000.0, {"submitted": 1728416952.7703576, "started": 1728416952.770432, "finished": 1728417113.5983334}, {"loss": 4.433906514299661, "info": {"arm_pitch": 0.4712, "arm_yaw": 0.2269, "tower_yaw": 0.7679, "tower_yValue": 0.15, "tower_xValue": 0.14, "end_effector_mount": 0.4887, "budget": 1000000, "evaluation": 4.433906514299661, "avg_manipulability": 3.396560914202033}}, null]
+
+# [[195, 0, 0], 1000000.0, {"submitted": 1728440322.5235844, "started": 1728440322.5236473, "finished": 1728440491.8420558}, {"loss": 4.436361609737212, "info": {"arm_pitch": 1.0297, "arm_yaw": -0.2792, "tower_yaw": 1.1344, "tower_yValue": 0.19, "tower_xValue": 0.01, "end_effector_mount": 0.6632, "budget": 1000000, "evaluation": 4.436361609737212, "avg_manipulability": 3.3818303415767326}}, null]
+
+UR_5_2:
+  - name: [175, 0, 0]
+    loss: 3.9356939345432203
+    avg_manipulability: 6.3858363927406785
+    info:
+      arm_pitch: 1.5533
+      arm_yaw: -0.0175
+      tower_yaw: -0.5585
+      tower_yValue: -0.15
+      tower_xValue: 0.1
+      end_effector_mount: 1.0995
+
+  - name: [179, 0, 0]
+    loss: 3.9564498826496095
+    avg_manipulability: 6.261300704102342
+    info:
+      arm_pitch: 0.3142
+      arm_yaw: 0.4014
+      tower_yaw: -0.7679
+      tower_yValue: 0.07
+      tower_xValue: 0.02
+      end_effector_mount: 1.2566
+
+  - name: [14, 0, 0]
+    loss: 4.069002106491471
+    avg_manipulability: 5.585987361051171
+    info:
+      arm_pitch: 0.5061
+      arm_yaw: -1.1868
+      tower_yaw: 0.6807
+      tower_yValue: -0.08
+      tower_xValue: 0.14
+      end_effector_mount: 0.5585
+
+
+# [[175, 0, 0], 1000000.0, {"submitted": 1728494586.1009302, "started": 1728494586.100985, "finished": 1728494730.3048506}, {"loss": 3.9356939345432203, "info": {"arm_pitch": 1.5533, "arm_yaw": -0.0175, "tower_yaw": -0.5585, "tower_yValue": -0.15, "tower_xValue": 0.1, "end_effector_mount": 1.0995, "budget": 1000000, "evaluation": 3.9356939345432203, "avg_manipulability": 6.3858363927406785}}, null]
+# [[179, 0, 0], 1000000.0, {"submitted": 1728495247.8730946, "started": 1728495247.8731751, "finished": 1728495417.7835445}, {"loss": 3.9564498826496095, "info": {"arm_pitch": 0.3142, "arm_yaw": 0.4014, "tower_yaw": -0.7679, "tower_yValue": 0.07, "tower_xValue": 0.02, "end_effector_mount": 1.2566, "budget": 1000000, "evaluation": 3.9564498826496095, "avg_manipulability": 6.261300704102342}}, null]
+# [[14, 0, 0], 1000000.0, {"submitted": 1728465733.0662196, "started": 1728465733.0662978, "finished": 1728465874.2991645}, {"loss": 4.069002106491471, "info": {"arm_pitch": 0.5061, "arm_yaw": -1.1868, "tower_yaw": 0.6807, "tower_yValue": -0.08, "tower_xValue": 0.14, "end_effector_mount": 0.5585, "budget": 1000000, "evaluation": 4.069002106491471, "avg_manipulability": 5.585987361051171}}, null]

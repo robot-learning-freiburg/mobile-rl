@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:macro name="hsrb_hand_gazebo" params="prefix">
+        <xacro:gazebo_link name="${prefix}_palm_link" gravity="true" collide="false" friction="0.9"/>
+        <xacro:gazebo_link name="${prefix}_camera_frame" gravity="false" collide="false" friction="0.9"/>
+        <xacro:gazebo_link name="${prefix}_l_proximal_link" gravity="true" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_l_spring_proximal_link" gravity="true" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_l_mimic_distal_link" gravity="true" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_l_distal_link" gravity="true" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_l_finger_tip_frame" gravity="false" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_l_finger_vacuum_frame" gravity="false" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_r_proximal_link" gravity="true" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_r_spring_proximal_link" gravity="true" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_r_mimic_distal_link" gravity="true" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_r_distal_link" gravity="false" collide="false" friction="1.0"/>
+        <xacro:gazebo_link name="${prefix}_r_finger_tip_frame" gravity="false" collide="false" friction="1.0"/>
+
+        <xacro:gazebo_joint name="${prefix}_palm_joint"/>
+        <xacro:gazebo_joint name="${prefix}_motor_joint"/>
+        <xacro:gazebo_joint name="${prefix}_l_proximal_joint"/>
+        <xacro:gazebo_joint name="${prefix}_l_spring_proximal_joint"/>
+        <xacro:gazebo_joint name="${prefix}_l_mimic_distal_joint"/>
+        <xacro:gazebo_joint name="${prefix}_l_distal_joint"/>
+        <xacro:gazebo_joint name="${prefix}_r_proximal_joint"/>
+        <xacro:gazebo_joint name="${prefix}_r_spring_proximal_joint"/>
+        <xacro:gazebo_joint name="${prefix}_r_mimic_distal_joint"/>
+        <xacro:gazebo_joint name="${prefix}_r_distal_joint"/>
+
+        <gazebo>
+          <plugin name="hsrb_hrh_gripper_plugin" filename="libtmc_gazebo_hrh_gripper.so">
+            <sensitiveness>0.05</sensitiveness>
+            <update_rate>1000.0</update_rate>
+            <max_torque>8.0</max_torque>
+            <!-- 5[deg] -->
+            <error_tolerance>0.0872</error_tolerance>
+            <stall_timeout>2.0</stall_timeout>
+            <robot_namespace>${personal_name}/${robot_name}</robot_namespace>
+          </plugin>
+<!--        MY CHANGE: DISABLE GRASP HACK AS IT LIKES TO CAUSE SEGFAULTS IN GAZEBO-->
+<!--          <plugin name="hsrb_grasp_hack_plugin" filename="libhsrb_grasp_hack.so">-->
+<!--            <grasp_check>-->
+<!--              <attach_steps>1</attach_steps>-->
+<!--              <detach_steps>2</detach_steps>-->
+<!--              <min_contact_count>1</min_contact_count>-->
+<!--              <max_attach_weight>1.2</max_attach_weight>-->
+<!--            </grasp_check>-->
+<!--            <gripper_link>${prefix}_r_distal_link</gripper_link>-->
+<!--            <gripper_link>${prefix}_l_distal_link</gripper_link>-->
+<!--            <gripper_link>${prefix}_r_spring_proximal_link</gripper_link>-->
+<!--            <gripper_link>${prefix}_l_spring_proximal_link</gripper_link>-->
+<!--	    &lt;!&ndash; hand_palm_link is merged with wrist_ft_sensor_frame by fixed joint  &ndash;&gt;-->
+<!--            <palm_link>wrist_ft_sensor_frame</palm_link>-->
+<!--            <robot_namespace>${personal_name}/${robot_name}</robot_namespace>-->
+<!--          </plugin>-->
+        </gazebo>
+    </xacro:macro>
+</robot>

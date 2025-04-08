@@ -1,0 +1,6 @@
+publish_voxel_map: false
+global_frame: map
+
+obstacles:
+  obstacle_range: 10.0
+  raytrace_range: 10.0

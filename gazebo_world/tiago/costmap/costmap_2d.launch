@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <!-- Map server -->
+<!--    <arg name="map_file" default="$(find modulation_rl)/gazebo_world/worlds/modulation_tasks.yaml"/>-->
+<!--    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />-->
+
+    <arg name="debug"      default="false"/>
+    <arg name="launch_prefix" value="gdb -ex run --args"     if="$(arg debug)"/>
+    <arg name="launch_prefix" value=""                   unless="$(arg debug)"/>
+    <arg name="public_sim" default="true"/>
+    <arg name="sim_suffix" value="_public_sim"     if="$(arg public_sim)"/>
+    <arg name="sim_suffix" value=""                unless="$(arg public_sim)"/>
+    <arg name="rgbd_sensors"   default="false"/> <!-- do not enable with public_sim -->
+    <arg name="rgbd_suffix" value="_rgbd" if="$(arg rgbd_sensors)"/>
+    <arg name="rgbd_suffix" value=""      unless="$(arg rgbd_sensors)"/>
+    <arg name="config_base_path" default="$(find pal_navigation_cfg_tiago)"/>
+
+    <!-- Laser filter (empty for public sim) -->
+    <node name="laser_filter" pkg="laser_filters" type="scan_to_scan_filter_chain">
+        <rosparam file="$(find tiago_laser_sensors)/config/$(arg laser_model)_filter.yaml"
+                  command="load"
+                  unless="$(eval arg('public_sim') or arg('multiple'))"/>
+        <remap from="scan"          to="scan_raw"/>
+        <remap from="scan_filtered" to="scan"/>
+    </node>
+
+    <!-- pointcloud to laserscan-->
+    <group if="$(arg public_sim)">
+        <include file="$(find tiago_laser_sensors)/launch/rgbd_cloud_laser.launch">
+            <arg name="cloud" value="/xtion/depth_registered/points"/>
+        </include>
+    </group>
+
+    <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" clear_params="false" launch-prefix="$(arg launch_prefix)">
+        <rosparam command="load" file="$(arg config_base_path)/config/base/common/recovery_behaviors$(arg rgbd_suffix).yaml"/>
+        <rosparam command="load" file="$(find modulation_rl)/gazebo_world/common/costmap/costmap_common_local.yaml" ns="costmap"/>
+        <rosparam command="load" file="$(find modulation_rl)/gazebo_world/tiago/costmap/costmap_common_params.yaml" ns="costmap"/>
+        <rosparam command="load" file="$(find modulation_rl)/gazebo_world/tiago/costmap/local_costmap_params.yaml" ns="costmap"/>
+    </node>
+
+    <node name="costmap_node_global" pkg="costmap_2d" type="costmap_2d_node" clear_params="false" launch-prefix="$(arg launch_prefix)">
+        <rosparam command="load" file="$(arg config_base_path)/config/base/common/recovery_behaviors$(arg rgbd_suffix).yaml"/>
+        <rosparam command="load" file="$(find modulation_rl)/gazebo_world/common/costmap/costmap_common_global.yaml" ns="costmap"/>
+        <rosparam command="load" file="$(find modulation_rl)/gazebo_world/tiago/costmap/costmap_common_params.yaml" ns="costmap"/>
+        <rosparam command="load" file="$(find modulation_rl)/gazebo_world/tiago/costmap/global_costmap_params.yaml" ns="costmap"/>
+    </node>
+</launch>

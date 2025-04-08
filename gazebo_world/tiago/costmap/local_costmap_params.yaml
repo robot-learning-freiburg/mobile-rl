@@ -1,0 +1,3 @@
+# Independent settings for the local costmap
+#local_costmap:
+global_frame: odom

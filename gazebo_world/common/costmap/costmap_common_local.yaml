@@ -1,0 +1,16 @@
+update_frequency : 50.0  # 5.0
+publish_frequency: 50.0  # 1.0
+
+#static_map    : false
+rolling_window: true
+width         : 3.0  # 4.0
+height        : 3.0  # 4.0
+resolution    : 0.025
+
+# NOTE: this now gets set in handle_launchfiles.py
+# TODO: keep these parameters here in the real world branches
+#inflation_radius: 0.00
+#inflation_layer:
+#  # real pr2 cannot handle inflation_radius = 0.0
+#  enabled: false
+#  inflation_radius: 0.00

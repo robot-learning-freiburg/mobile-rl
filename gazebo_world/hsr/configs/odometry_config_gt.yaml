@@ -1,0 +1,8 @@
+odom_topics:
+  # wheel_odom
+  wheel_odom: odom_ground_truth
+# laser_odom
+  laser_odom: odom_ground_truth
+initial_odom: laser_odom
+odom_frame: odom
+odom_child_frame: base_footprint

@@ -1,0 +1,78 @@
+# FROM ros:melodic-ros-core-bionic
+FROM nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu18.04
+# ENV LD_LIBRARY_PATH /usr/local/cuda-11.1/lib64:/usr/local/cuda-10.2/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+ENV HOME /root
+
+#####################
+# ROS CORE
+#####################
+# setup timezone
+RUN echo 'Etc/UTC' > /etc/timezone && \
+    ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+    apt-get update && \
+    apt-get install -q -y --no-install-recommends tzdata && \
+    rm -rf /var/lib/apt/lists/*
+
+# setup environment
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    ROS_DISTRO=melodic
+
+# install packages
+RUN apt-get update && apt-get install -q -y --no-install-recommends \
+    dirmngr \
+    gnupg2 \
+    psmisc \
+    vim \
+    wget \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# setup keys
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+
+# setup sources.list
+RUN echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list
+
+#####################
+# ROS BASE & APPLICATION SPECIFIC PACKAGES
+#####################
+# install bootstrap tools and ros, bootstrap rosdep
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    build-essential \
+    python-rosdep \
+    python-rosinstall \
+    python-vcstools \
+    ros-melodic-ros-base \
+    ros-melodic-pybind11-catkin \
+    ros-melodic-moveit \
+    ros-melodic-moveit-visual-tools \
+    && rosdep init \
+    && rosdep update --rosdistro $ROS_DISTRO \
+    && rm -rf /var/lib/apt/lists/* \
+    && echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+
+######################
+## UPGRADE TO LATEST GAZEBO VERSION FOR MELODIC FOR POINTER ISSUE IF RUNNING LONG
+######################
+RUN apt-get update && apt upgrade -y libignition-math2 gazebo9 && rm -rf /var/lib/apt/lists/*
+
+
+#####################
+# INSTALL CONDA
+#####################
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    /opt/conda/bin/conda clean -tipsy && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
+
+ENV PATH=/opt/conda/bin:$PATH \
+    ENV_NAME=base \
+    TORCH_VERSION=v1.7.1
+
+RUN conda install -n ${ENV_NAME} python=3.7 setuptools cmake cffi \
+    && conda clean -afy
+
+CMD bash

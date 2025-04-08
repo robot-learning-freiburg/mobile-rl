@@ -1,0 +1,108 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/python-3-anaconda
+{
+	"name": "modulation-rl",
+	"build": {
+		"context": "..",
+		"dockerfile": "${localWorkspaceFolder}/Dockerfile",
+		"args": {
+			"RLGITUSER": "todo",
+			"RLGITPWD": "todo",
+            "MY_CUDA_VERSION": "11.1",
+		}
+	},
+	"containerEnv": {
+		"GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+		"GITHUB_USER": "${localEnv:GITHUB_USER}"
+	},
+	"runArgs": [
+		"--name=modulation-rl-${localEnv:USER}",
+		"--entrypoint=bash",
+		"-it",
+		"--gpus=all",
+		"-e",
+		"ACCEPT_EULA=Y",
+		"--rm",
+		"--network=host",
+		"--env",
+		"DISPLAY=",
+		"--env",
+		"NVIDIA_DRIVER_CAPABILITIES=all",
+		"--volume",
+		"/tmp/.X11-unix:/tmp/.X11-unix:rw",
+		"--volume",
+		"${localEnv:HOME}/.Xauthority:/root/.Xauthority:rw",
+		"--env",
+		"QT_X11_NO_MITSHM=1",
+		"--privileged",
+		"-e",
+		"WANDB_API_KEY=todo",
+	],
+	"mounts": [
+		// "source=/usr/share/vulkan/icd.d/nvidia_icd.json,target=/etc/vulkan/icd.d/nvidia_icd.json,type=bind",
+		// "source=/usr/share/vulkan/implicit_layer.d/nvidia_layers.json,target=/etc/vulkan/implicit_layer.d/nvidia_layers.json,type=bind",
+		// "source=/usr/share/glvnd/egl_vendor.d/10_nvidia.json,target=/usr/share/glvnd/egl_vendor.d/10_nvidia.json,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/cache/kit,target=/root/.cache/Kit,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/cache/ov,target=/root/.cache/ov,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/cache/pip,target=/root/.cache/pip,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/cache/glcache,target=/root/.cache/nvidia/GLCache,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/cache/computecache,target=/root/.nv/ComputeCache,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/logs,target=/root/.nvidia-omniverse/logs,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/config,target=/root/.nvidia-omniverse/config,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/data,target=/root/.local/share/ov/data,type=bind",
+		// "source=${localEnv:HOME}/docker/isaac-sim/documents,target=/root/Documents,type=bind",
+		// // mount the ros package into the ros workspace. Note: this happens after build, so still have to build the package inside docker
+		"source=${localWorkspaceFolder}/scripts,target=/root/catkin_ws_pr2/src/modulation_rl/scripts,type=bind",
+		"source=${localWorkspaceFolder}/scripts,target=/root/catkin_ws_hsr/src/modulation_rl/scripts,type=bind",
+		"source=${localWorkspaceFolder}/scripts,target=/root/catkin_ws_tiago/src/modulation_rl/scripts,type=bind",
+		"source=${localWorkspaceFolder}/scripts,target=/root/catkin_ws_fmm/src/modulation_rl/scripts,type=bind",
+		"source=${localWorkspaceFolder}/gazebo_world,target=/root/catkin_ws_pr2/src/modulation_rl/gazebo_world,type=bind",
+		"source=${localWorkspaceFolder}/gazebo_world,target=/root/catkin_ws_hsr/src/modulation_rl/gazebo_world,type=bind",
+		"source=${localWorkspaceFolder}/gazebo_world,target=/root/catkin_ws_tiago/src/modulation_rl/gazebo_world,type=bind",
+		"source=${localWorkspaceFolder}/gazebo_world,target=/root/catkin_ws_fmm/src/modulation_rl/gazebo_world,type=bind",
+	],
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"python.defaultInterpreterPath": "/opt/conda/bin/python",
+				"python.linting.enabled": true,
+				// "python.linting.pylintEnabled": true,
+				// 			"python.formatting.autopep8Path": "/opt/conda/bin/autopep8",
+				// 			"python.formatting.yapfPath": "/opt/conda/bin/yapf",
+				// 			"python.linting.flake8Path": "/opt/conda/bin/flake8",
+				// 			"python.linting.pycodestylePath": "/opt/conda/bin/pycodestyle",
+				// 			"python.linting.pydocstylePath": "/opt/conda/bin/pydocstyle",
+				// 			"python.linting.pylintPath": "/opt/conda/bin/pylint"
+				// "terminal.integrated.shell.linux": "/bin/bash",
+				"terminal.integrated.profiles.linux": {
+					"bash (container default)": {
+						"path": "/usr/bin/bash",
+						"overrideName": true
+					},
+					"terminal.integrated.defaultProfile.linux": "bash (container default)"
+				},
+				"C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 0}",
+			},
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-python.python",
+				"github.copilot",
+				"ms-vscode.cpptools",
+				// "ms-python.vscode-pylance"
+			]
+		}
+	},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "git config --global user.name 'todo' && git config --global user.email 'todo'",
+	// "postStartCommand": "bash -c 'source ~/.bashrc' && conda activate isaac-sim && bash -c 'source /isaac-sim/setup_conda_env.sh'"
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode",
+	// "features": {
+	// 	"git": "latest"
+	// }
+}

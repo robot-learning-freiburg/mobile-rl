@@ -1,0 +1,44 @@
+# Overrides the config_default.yaml file with user specific configurations
+design_config:
+  training_steps: 15000
+  debug: false
+  num_samples: 32 #
+  n_iterations: 25 #important
+  min_budget: 300000 # select budget between 300000 and 1000000
+  max_budget: 1000000 
+  eta: 3
+  n_workers: 1 
+  optimization_type: design # design or manipulability
+  arm_selection: franka_arm # ur5_arm or franka_arm
+  use_manipulability_config: None # omni, diff or ur5
+
+
+ray_config:
+  seed: 13
+  vis_env: no
+  debug: no
+  env: fmm
+  load_best_default: true
+  ray_verbosity: 3
+  # bioik_center_joints_weight: 0.0
+  # bioik_avoid_joint_limits_weight: 0.0
+  # bioik_regularization_weight: 0.0
+  num_workers: 20 # was 20 
+  num_gpus: 0.24 # was 1
+  num_cpus_per_worker: 0.1
+  num_envs_per_worker: 1
+  num_gpus_per_worker: 0
+  training_intensity: 0.1
+  nr_evaluations: 100 
+  buffer_size: 100000
+  eval_tasks:
+    # - rndstartrndgoal
+    # - picknplace
+    # - roomDoor
+    # - drawer
+    - simpleobstacle
+    # - door
+  resume_model_name: None
+  simpleobstacle_spacing: 1.7 # reduce spacing to make agent able to resolve roomDoor task 
+
+

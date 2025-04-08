@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<robot name="hsrb"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- common xacro -->
+    <xacro:include filename="$(find hsrb_description)/urdf/common.xacro" />
+    <xacro:include filename="$(find hsrb_description)/urdf/materials.urdf.xacro" />
+
+    <!-- links and joints -->
+    <xacro:include filename="$(find hsrb_description)/urdf/base_v2/base.urdf.xacro" />
+    <xacro:include filename="$(find hsrb_description)/urdf/torso_v0/torso.urdf.xacro" />
+    <xacro:include filename="$(find hsrb_description)/urdf/head_v2/head.urdf.xacro" />
+    <xacro:include filename="$(find hsrb_description)/urdf/arm_v0/arm.urdf.xacro" />
+    <xacro:include filename="$(find hsrb_description)/urdf/wrist_v0/wrist.urdf.xacro" />
+<!--    <xacro:include filename="$(find hsrb_description)/urdf/hand_v0/hand.urdf.xacro" />-->
+<!-- MYCHANGE: remove the grasp hack as it can sometimes cause segmentation faults -->
+    <xacro:include filename="$(find modulation_rl)/gazebo_world/hsr/robot/hand.urdf.xacro" />
+
+    <xacro:arg name="personal_name" default=""/>
+    <xacro:arg name="loopback_hardware" default="false" />
+
+    <!-- constant -->
+    <xacro:property name="personal_name" value="$(arg personal_name)"/>
+    <xacro:property name="robot_name" value="hsrb"/>
+
+    <!-- create robot -->
+    <xacro:hsrb_base prefix="base" personal_name="${personal_name}" robot_namespace="${robot_name}" robot_name="${robot_name}"/>
+
+    <xacro:hsrb_torso prefix="torso" parent="base_link" mimic_joint="arm_lift_joint">
+        <origin xyz="0.0 0.0 0.752" rpy="0.0 0.0 0.0"/>
+    </xacro:hsrb_torso>
+
+    <xacro:hsrb_head prefix="head" parent="torso_lift_link">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    </xacro:hsrb_head>
+
+    <xacro:hsrb_arm prefix="arm" parent="base_link">
+        <origin xyz="0.0 0.0 0.340" rpy="0.0 0.0 0.0"/>
+    </xacro:hsrb_arm>
+
+    <xacro:hsrb_wrist prefix="wrist" parent="arm_roll_link" robot_namespace="${robot_name}">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    </xacro:hsrb_wrist>
+
+    <xacro:hsrb_hand prefix="hand" parent="wrist_roll_link">
+        <origin xyz="0.012 0.0 0.1405" rpy="0.0 0.0 ${pi}"/>
+    </xacro:hsrb_hand>
+
+    <!-- ADDED RANGE SENSORS FOR GAZEBO -->
+    <!-- TODO: might also need to disable collisisons with the base_sonar_0[1-3]_links in the srdf -->
+    <xacro:include filename="$(find modulation_rl)/gazebo_world/common/range_sensor/range.urdf.xacro"/>
+    <xacro:property name="deg_to_rad" value="0.01745329251994329577" />
+    <xacro:property name="sonar_name" value="base" />
+
+    <xacro:range_sensor name="${sonar_name}_sonar_03" parent="${sonar_name}" ros_topic="sonar_${sonar_name}" update_rate="5" maxRange="1.0" minRange="0.02" fov="0.5" radiation="ultrasound">
+        <origin xyz="-0.152 0.152 0.25" rpy="0 0 ${135 * deg_to_rad}"/>
+    </xacro:range_sensor>
+    <xacro:range_sensor name="${sonar_name}_sonar_02" parent="${sonar_name}" ros_topic="sonar_${sonar_name}" update_rate="5" maxRange="1.0" minRange="0.02" fov="0.5" radiation="ultrasound">
+        <origin xyz="-0.215 0.0 0.25" rpy="0 0 ${180 * deg_to_rad}"/>
+    </xacro:range_sensor>
+    <xacro:range_sensor name="${sonar_name}_sonar_01" parent="${sonar_name}" ros_topic="sonar_${sonar_name}" update_rate="5" maxRange="1.0" minRange="0.02" fov="0.5" radiation="ultrasound">
+        <origin xyz="-0.152 -0.152 0.25" rpy="0 0 ${225 * deg_to_rad}"/>
+    </xacro:range_sensor>
+
+
+    <xacro:include filename="$(find modulation_rl)/gazebo_world/common/plugins/modulation_bumper.gazebo.xacro" />
+    <xacro:modulation_bumper reference="base_b_bumper_link" sensor_name="base_b_bumper_link" collision_name="base_b_bumper_link_collision" />
+    <xacro:modulation_bumper reference="base_f_bumper_link" sensor_name="base_f_bumper_link" collision_name="base_f_bumper_link_collision" />
+    <xacro:modulation_bumper reference="base_footprint" sensor_name="base_footprint" collision_name="base_footprint_fixed_joint_lump__base_link_collision" />
+    <xacro:modulation_bumper reference="torso_lift_link" sensor_name="torso_lift_link" collision_name="torso_lift_link_collision" />
+    <xacro:modulation_bumper reference="arm_flex_link" sensor_name="arm_flex_link" collision_name="arm_flex_link_collision" />
+    <xacro:modulation_bumper reference="arm_roll_link" sensor_name="arm_roll_link" collision_name="arm_roll_link_collision" />
+    <xacro:modulation_bumper reference="wrist_ft_sensor_frame" sensor_name="wrist_ft_sensor_frame" collision_name="wrist_ft_sensor_frame_fixed_joint_lump__wrist_roll_link_collision" />
+    <xacro:modulation_bumper reference="wrist_ft_sensor_frame" sensor_name="wrist_ft_sensor_frame2" collision_name="wrist_ft_sensor_frame_fixed_joint_lump__hand_palm_link_collision_1" />
+    <xacro:modulation_bumper reference="hand_l_spring_proximal_link" sensor_name="hand_l_spring_proximal_link" collision_name="hand_l_spring_proximal_link_collision" />
+    <xacro:modulation_bumper reference="hand_r_spring_proximal_link" sensor_name="hand_r_spring_proximal_link" collision_name="hand_r_spring_proximal_link_collision" />
+    <xacro:modulation_bumper reference="hand_l_distal_link" sensor_name="hand_l_distal_link" collision_name="hand_l_distal_link_collision" />
+    <xacro:modulation_bumper reference="hand_r_distal_link" sensor_name="hand_r_distal_link" collision_name="hand_r_distal_link_collision" />
+
+    <gazebo>
+        <plugin name="${robot_name}_ros_control" filename="lib${robot_name}_gazebo_ros_control.so">
+            <robotNamespace>${personal_name}/${robot_name}</robotNamespace>
+            <legacyModeNS>false</legacyModeNS>
+            <xacro:if value="$(arg loopback_hardware)">
+                <robotSimType>loopback_robot_hardware/LoopbackRobotHWSim</robotSimType>
+            </xacro:if>
+        </plugin>
+
+        <plugin name="${robot_name}_p3d_ground_truth" filename="libgazebo_ros_p3d.so">
+            <robotNamespace>${personal_name}/${robot_name}</robotNamespace>
+            <bodyName>base_footprint</bodyName>
+            <topicName>odom_ground_truth</topicName>
+            <frameName>map</frameName>
+            <updateRate>30</updateRate>
+        </plugin>
+        <plugin filename="libgazebo_ros_moveit_planning_scene.so" name="gazebo_ros_moveit_planning_scene">
+            <topicName>/planning_scene</topicName>
+            <sceneName>mytask</sceneName>
+            <robotName>${robot_name}</robotName>
+            <updatePeriod>0.5</updatePeriod>
+            <publishFrameId>odom</publishFrameId>
+        </plugin>
+    </gazebo>
+</robot>
