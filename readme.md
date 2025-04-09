@@ -1,4 +1,4 @@
-# N2M2:  Learning Navigation for Arbitrary Mobile Manipulation Motions in Unseen and Dynamic Environments
+# Task-Driven Co-Design of Mobile Manipulators
 
 [**arXiv**](https://arxiv.org/abs/2412.16635) | [**website**](https://moma-codesign.cs.uni-freiburg.de) 
 
