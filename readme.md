@@ -13,6 +13,8 @@ Please cite the paper as follows:
 
 Note: the current version represents the code used for the paper, except for the proprietary components outlined below. We may release a cleaner, more modular version of this code in the future.
 
+**MoMa-Codesign:** This repository also contains the code for the paper *Task-Driven Co-Design of Mobile Manipulators* in the `moma-codesign` branch.
+
 ## Proprietary Components
 ### HSR
 The HSR environment relies on packages that are part of the proprietory HSR simulator. If you have an HSR account with Toyota,
